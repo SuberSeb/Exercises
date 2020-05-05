@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace JsonImporter.Tools
+namespace JsonImporter.Json
 {
     internal class JsonReader
     {
