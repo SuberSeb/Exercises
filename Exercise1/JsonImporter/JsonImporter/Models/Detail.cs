@@ -1,11 +1,5 @@
 ﻿namespace JsonImporter.Models
 {
-    internal enum YesOrNo : byte
-    {
-        No,
-        Yes
-    }
-
     internal class Detail
     {
         public string TeamName { get; set; }
@@ -23,6 +17,6 @@
         public string CountryCodeIOC { get; set; }
         public string Country { get; set; }
         public string Website { get; set; }
-        public YesOrNo IsHomeCompetitor { get; set; }
+        public YesOrNoEnum IsHomeCompetitor { get; set; }
     }
 }

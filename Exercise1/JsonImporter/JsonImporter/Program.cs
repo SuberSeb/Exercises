@@ -1,4 +1,5 @@
 ﻿using System;
+using JsonImporter.Tools;
 
 namespace JsonImporter
 {
@@ -6,7 +7,8 @@ namespace JsonImporter
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            JsonGenerator jsonGenerator = new JsonGenerator();
+            jsonGenerator.GenerateJson(@"C:\Users\SuberSeb\Desktop\message.json");
 
             Console.WriteLine();
         }

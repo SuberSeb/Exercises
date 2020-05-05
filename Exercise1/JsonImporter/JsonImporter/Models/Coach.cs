@@ -1,6 +1,6 @@
 ﻿namespace JsonImporter.Models
 {
-    internal class Person
+    internal class Coach
     {
         public int PersonId { get; set; }
         public string FamilyName { get; set; }

@@ -20,9 +20,9 @@ namespace JsonImporter.Models
         public string InternationalReference { get; set; }
         public string ShirtNumber { get; set; }
         public string PlayingPosition { get; set; }
-        public YesOrNo Starter { get; set; } = YesOrNo.No;
-        public YesOrNo Captain { get; set; } = YesOrNo.No;
-        public YesOrNo Active { get; set; } = YesOrNo.No;
+        public YesOrNoEnum Starter { get; set; } = YesOrNoEnum.No;
+        public YesOrNoEnum Captain { get; set; } = YesOrNoEnum.No;
+        public YesOrNoEnum Active { get; set; } = YesOrNoEnum.No;
         public string NationalityCode { get; set; }
         public string NationalityCodeIOC { get; set; }
         public string Nationality { get; set; }
