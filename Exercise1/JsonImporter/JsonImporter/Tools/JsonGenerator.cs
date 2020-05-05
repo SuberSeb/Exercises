@@ -140,15 +140,15 @@ namespace JsonImporter.Tools
         {
             List<Message> messages = new List<Message>();
 
-            for(int i = 0; i < 500; i++)
+            for(int i = 0; i < 10; i++)
             {
                 messages.Add(CreateMessage(i, CreateTeams()));
             }
 
-            string JSONresult = JsonConvert.SerializeObject(messages);
+            string Jsonresult = JsonConvert.SerializeObject(messages);
 
-            using var writer = new StreamWriter(path, true);
-            writer.WriteLine(JSONresult.ToString());
+            using var writer = new StreamWriter(path, false);
+            writer.WriteLine(Jsonresult.ToString());
             writer.Close();
         }
     }
