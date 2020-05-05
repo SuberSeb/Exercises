@@ -1,19 +1,22 @@
-﻿using System;
+﻿using JsonImporter.Tools;
+using System;
 using System.Threading.Tasks;
-using JsonImporter.Tools;
 
 namespace JsonImporter
 {
     internal class Program
     {
-        private static readonly string path = @"C:\Users\SuberSeb\Desktop\message.json";
-
         private static async Task Main(string[] args)
         {
-            JsonReader jsonReader = new JsonReader();
-            await jsonReader.ReadJsonAsync(path);           
+            Console.WriteLine("Enter file path for 'message.json'.");
+            string path = Console.ReadLine();
 
-            Console.ReadLine();
+            JsonReader jsonReader = new JsonReader();
+            await jsonReader.ReadJsonAsync(path);
+
+            Console.WriteLine();
+            Console.WriteLine("Press any button to exit.");
+            Console.ReadKey();
         }
     }
 }

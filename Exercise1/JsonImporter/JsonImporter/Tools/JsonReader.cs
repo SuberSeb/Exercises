@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JsonImporter.Tools
 {
-    class JsonReader
+    internal class JsonReader
     {
         public async Task ReadJsonAsync(string path)
         {
