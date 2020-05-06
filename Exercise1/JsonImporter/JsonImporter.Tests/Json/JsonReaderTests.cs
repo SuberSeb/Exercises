@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UnitTests.Json
+namespace JsonImporter.Tests.Json
 {
     class JsonReaderTests
     {

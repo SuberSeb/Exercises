@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JsonImporter.Json
 {
-    internal class JsonReader
+    public class JsonReader
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 

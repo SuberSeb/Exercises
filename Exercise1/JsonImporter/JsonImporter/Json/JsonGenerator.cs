@@ -7,7 +7,7 @@ using System.IO;
 
 namespace JsonImporter.Json
 {
-    internal class JsonGenerator
+    public class JsonGenerator
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly RandomGenerator generator = new RandomGenerator();
@@ -121,11 +121,11 @@ namespace JsonImporter.Json
             };
         }
 
-        private List<Message> CreateMessages()
+        private List<Message> CreateMessages(int numberOfMessages)
         {
             List<Message> messages = new List<Message>();
 
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < numberOfMessages; i++)
             {
                 messages.Add(new Message { MessageId = i, Type = "Message type", Teams = CreateTeams() });
             }
@@ -133,33 +133,49 @@ namespace JsonImporter.Json
             return messages;
         }
 
-        public void GenerateJson(string path)
+        public string GenerateJson(string path, string fileName, int numberOfMessages)
         {
-            string jsonResult = "";
+            string jsonResult = String.Empty;
 
-            try
+            if(numberOfMessages >= 1 && Directory.Exists(path) && fileName != String.Empty)
             {
-                jsonResult = JsonConvert.SerializeObject(CreateMessages());
-                logger.Info("JSON was serialized successfully");
-            }
-            catch (JsonException ex)
-            {
-                logger.Error("Error while serializing JSON: " + ex);
-            }
+                try
+                {
+                    jsonResult = JsonConvert.SerializeObject(CreateMessages(numberOfMessages));
+                    logger.Info("JSON was serialized successfully");
 
-            try
-            {
-                using var writer = new StreamWriter(path, false);
-                writer.WriteLine(jsonResult.ToString());
-                writer.Close();
+                    try
+                    {
+                        if(jsonResult != String.Empty)
+                        {
+                            using var writer = new StreamWriter(path + @"\" + fileName, false);
+                            writer.WriteLine(jsonResult.ToString());
+                            writer.Close();
 
-                FileInformation.GetFileInfoInLog(path);
-                logger.Info("Write to file {path} was successful", path);
+                            FileInformation.GetFileInfoInLog(path);
+                            logger.Info("Write to file {path} with {fileName} was successful", path, fileName);
+                        }
+                        else
+                        {
+                            logger.Error("Error - writing empty string to file");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error("Error while writing to file {path}: {ex}", path, ex);
+                    }
+                }
+                catch (JsonException ex)
+                {
+                    logger.Error("Error while serializing JSON: " + ex);
+                }                
             }
-            catch (Exception ex)
+            else
             {
-                logger.Error("Error while writing to file {path}: {ex}", path, ex);
-            }
+                logger.Error("Invalid arguments");
+            }        
+
+            return jsonResult;
         }
     }
 }

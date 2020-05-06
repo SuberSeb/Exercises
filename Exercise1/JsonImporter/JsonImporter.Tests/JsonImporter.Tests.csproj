@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Tools\" />
+    <ProjectReference Include="..\JsonImporter\JsonImporter.csproj" />
   </ItemGroup>
 
 </Project>
