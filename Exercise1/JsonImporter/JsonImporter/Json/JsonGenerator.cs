@@ -9,6 +9,7 @@ namespace JsonImporter.Json
 {
     internal class JsonGenerator
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly RandomGenerator generator = new RandomGenerator();
 
         private List<Player> CreatePlayersList(int numberOfPlayers)
@@ -124,7 +125,7 @@ namespace JsonImporter.Json
         {
             List<Message> messages = new List<Message>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 500; i++)
             {
                 messages.Add(new Message { MessageId = i, Type = "Message type", Teams = CreateTeams() });
             }
@@ -134,17 +135,30 @@ namespace JsonImporter.Json
 
         public void GenerateJson(string path)
         {
-            string jsonResult = JsonConvert.SerializeObject(CreateMessages());
+            string jsonResult = "";
+
+            try
+            {
+                jsonResult = JsonConvert.SerializeObject(CreateMessages());
+                logger.Info("JSON was serialized successfully");
+            }
+            catch (JsonException ex)
+            {
+                logger.Error("Error while serializing JSON: " + ex);
+            }
 
             try
             {
                 using var writer = new StreamWriter(path, false);
                 writer.WriteLine(jsonResult.ToString());
                 writer.Close();
+
+                FileInformation.GetFileInfoInLog(path);
+                logger.Info("Write to file {path} was successful", path);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                logger.Error("Error while writing to file {path}: {ex}", path, ex);
             }
         }
     }

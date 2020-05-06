@@ -6,18 +6,21 @@ namespace JsonImporter
 {
     internal class Program
     {
+        private static readonly string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         private static async Task Main(string[] args)
         {
-            //Console.WriteLine("Enter full file path for 'message.json'.");
-            //string path = Console.ReadLine();
+            string path = desktopPath + @"\message.json";
+            logger.Info("File 'message.json' will be saved in " + desktopPath);
 
-            string path = @"C:\Users\SuberSeb\Desktop\message.json";
+            JsonGenerator jsonGenerator = new JsonGenerator();
+            jsonGenerator.GenerateJson(path);
 
             JsonReader jsonReader = new JsonReader();
             await jsonReader.ReadJsonAsync(path);
 
-            Console.WriteLine();
-            Console.WriteLine("Press any button to exit.");
+            Console.WriteLine("Press any button to exit...");
             Console.ReadKey();
         }
     }

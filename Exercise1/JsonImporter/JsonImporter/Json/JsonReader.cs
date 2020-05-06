@@ -9,25 +9,32 @@ namespace JsonImporter.Json
 {
     internal class JsonReader
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         public async Task ReadJsonAsync(string path)
         {
             string messages = "";
-
-            JsonGenerator jsonGenerator = new JsonGenerator();
-            jsonGenerator.GenerateJson(path);
 
             try
             {
                 using StreamReader reader = new StreamReader(path);
                 messages = await reader.ReadToEndAsync();
-                Console.WriteLine("Success");
+                logger.Info("Reading from file successful");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                logger.Error("Error while reading from file: " + ex);
             }
 
-            var json = JsonConvert.DeserializeObject<List<Message>>(messages);
+            try
+            {
+                var json = JsonConvert.DeserializeObject<List<Message>>(messages);
+                logger.Info("JSON deserialization successful");
+            }
+            catch (JsonException ex)
+            {
+                logger.Error("Error while deserialization JSON: " + ex);
+            }
         }
     }
 }
