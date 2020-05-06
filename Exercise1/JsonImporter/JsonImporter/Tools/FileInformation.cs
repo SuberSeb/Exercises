@@ -9,7 +9,7 @@ namespace JsonImporter.Tools
         public static void GetFileInfoInLog(string path)
         {
             FileInfo fileInfo = new FileInfo(path);
-            logger.Info("Full file path: {path}. File size is {size}.", fileInfo.FullName, fileInfo.Length);
+            logger.Info("Full file path: {path}. File size is {size} bytes.", fileInfo.FullName, fileInfo.Length);
         }
     }
 }
