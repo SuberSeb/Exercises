@@ -1,5 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
-using JsonImporter.Models;
+﻿using JsonImporter.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 

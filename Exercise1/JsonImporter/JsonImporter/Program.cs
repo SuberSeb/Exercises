@@ -1,4 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Engines;
+using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using JsonImporter.Json;
 using JsonImporter.Models;
@@ -11,6 +14,23 @@ namespace JsonImporter
     internal class Program
     {
         private static readonly string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\message.json";
+
+        [SimpleJob(launchCount: 5)]
+        public class ParserBenchmark
+        {
+            private static readonly string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\message.json";
+            private readonly JsonParser jsonParser;
+            private readonly string jsonContent;
+
+            public ParserBenchmark()
+            {
+                jsonParser = new JsonParser();
+                jsonContent = Files.Read(path);
+            }
+
+            [Benchmark]
+            public List<Message> Parser() => jsonParser.Parse(jsonContent);
+        }
 
         private static void Main(string[] args)
         {
@@ -28,22 +48,6 @@ namespace JsonImporter
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
-        }        
-    }
-
-    public class ParserBenchmark
-    {
-        private static readonly string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\message.json";
-        private JsonParser jsonParser;
-        private readonly string jsonContent;
-
-        public ParserBenchmark()
-        {
-            jsonParser = new JsonParser();
-            jsonContent = Files.Read(path);
         }
-
-        [Benchmark]
-        public List<Message> Parser() => jsonParser.Parse(jsonContent);
-    }
+    }    
 }
