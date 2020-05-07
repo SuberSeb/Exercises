@@ -7,12 +7,6 @@ namespace JsonImporter.Tools
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public static void GetInfoInLog(string path)
-        {
-            FileInfo fileInfo = new FileInfo(path);
-            logger.Info("Full file path: {path}. File size is {size} bytes.", fileInfo.FullName, fileInfo.Length);
-        }
-
         public static string Read(string path)
         {
             string fileContent = String.Empty;
@@ -42,14 +36,14 @@ namespace JsonImporter.Tools
         {
             try
             {
-                if (content != String.Empty)
+                if (content != String.Empty && Directory.Exists(path.Replace(Path.GetFileName(path), String.Empty)))
                 {
                     using var writer = new StreamWriter(path, false);
                     writer.WriteLine(content.ToString());
                     writer.Close();
 
-                    Files.GetInfoInLog(path);
-                    logger.Info("Write to file {path} was successful", path);
+                    FileInfo fileInfo = new FileInfo(path);
+                    logger.Info("Write to file {path} was successful. Filesize is {size} bytes", path, fileInfo.Length);
                 }
                 else
                 {

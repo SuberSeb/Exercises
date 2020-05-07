@@ -3,7 +3,6 @@ using JsonImporter.Tools;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace JsonImporter.Json
 {
@@ -133,7 +132,7 @@ namespace JsonImporter.Json
             return messages;
         }
 
-        public string GenerateJson(int numberOfMessages)
+        public string Generate(int numberOfMessages)
         {
             string jsonResult = String.Empty;
 

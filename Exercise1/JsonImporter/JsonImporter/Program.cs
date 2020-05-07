@@ -1,6 +1,6 @@
 ﻿using JsonImporter.Json;
-using JsonImporter.Tools;
 using JsonImporter.Models;
+using JsonImporter.Tools;
 using System;
 using System.Collections.Generic;
 
@@ -12,25 +12,23 @@ namespace JsonImporter
 
         private static void Main(string[] args)
         {
-            //Количество сообщений в JSON
+            //Enter number of messages
             Console.WriteLine("Enter number of messages: ");
+            Console.WriteLine("(About 500 messages will occupy 7.5 Mbytes on disk)");
             int numberOfMessages = Convert.ToInt32(Console.ReadLine());
 
-            //Генерация JSON 
+            //JSON generation
             JsonGenerator jsonGenerator = new JsonGenerator();
-            string json = jsonGenerator.GenerateJson(numberOfMessages);
-
+            string json = jsonGenerator.Generate(numberOfMessages);
             Console.WriteLine("JSON generation complete.");
 
-            //Запись JSON
+            //Writing generated JSON in fuile
             Files.Write(path, json);
-
             Console.WriteLine("JSON write to file complete.");
 
-            //Чтение из JSON 
-            JsonReader jsonReader = new JsonReader();
-            List<Message> messages = jsonReader.ReadJson(path);
-
+            //Read generated JSON from file
+            JsonParser jsonParser = new JsonParser();
+            List<Message> messages = jsonParser.Parse(Files.Read(path));
             Console.WriteLine("JSON reading complete.");
 
             Console.WriteLine("Press any button to exit...");

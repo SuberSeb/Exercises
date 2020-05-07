@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace JsonImporter.Json
 {
-    public class JsonReader
+    public class JsonParser
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public List<Message> ReadJson(string fileContent)
+        public List<Message> Parse(string fileContent)
         {
             List<Message> messages = new List<Message>();
 

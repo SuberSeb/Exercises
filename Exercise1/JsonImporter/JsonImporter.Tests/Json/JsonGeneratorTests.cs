@@ -10,7 +10,7 @@ namespace JsonImporter.Tests.Json
         public void GenerateJson_VALID()
         {
             JsonGenerator jsonGenerator = new JsonGenerator();
-            string result = jsonGenerator.GenerateJson(10);
+            string result = jsonGenerator.Generate(10);
 
             Assert.True(result != String.Empty);
             Assert.True(JsonValidator.IsJsonValid(result));
@@ -19,9 +19,8 @@ namespace JsonImporter.Tests.Json
         [Fact]
         public void GenerateJson_INVALID_NUMBER()
         {
-
             JsonGenerator jsonGenerator = new JsonGenerator();
-            string result = jsonGenerator.GenerateJson(-1);
+            string result = jsonGenerator.Generate(-1);
 
             Assert.True(result == String.Empty);
             Assert.False(JsonValidator.IsJsonValid(result));

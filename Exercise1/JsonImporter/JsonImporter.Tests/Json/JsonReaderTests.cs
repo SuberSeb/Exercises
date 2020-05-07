@@ -21,8 +21,8 @@ namespace JsonImporter.Tests.Json
         [Fact]
         public void ReadJson_VALID()
         {
-            JsonReader jsonReader = new JsonReader();
-            List<Message> result = jsonReader.ReadJson(Files.Read(jsonValidExampleFile));
+            JsonParser jsonReader = new JsonParser();
+            List<Message> result = jsonReader.Parse(Files.Read(jsonValidExampleFile));
 
             Assert.NotNull(result);
             Assert.NotEmpty(result);
@@ -32,8 +32,8 @@ namespace JsonImporter.Tests.Json
         [Fact]
         public void ReadJson_INVALID_JSON_CONTENT()
         {
-            JsonReader jsonReader = new JsonReader();
-            List<Message> result = jsonReader.ReadJson(Files.Read(jsonInvalidContentExampleFile));
+            JsonParser jsonReader = new JsonParser();
+            List<Message> result = jsonReader.Parse(Files.Read(jsonInvalidContentExampleFile));
 
             Assert.NotNull(result);
             Assert.Empty(result);
@@ -42,8 +42,8 @@ namespace JsonImporter.Tests.Json
         [Fact]
         public void ReadJson_INVALID_FILE()
         {
-            JsonReader jsonReader = new JsonReader();
-            List<Message> result = jsonReader.ReadJson(notJson);
+            JsonParser jsonReader = new JsonParser();
+            List<Message> result = jsonReader.Parse(notJson);
 
             Assert.NotNull(result);
             Assert.Empty(result);
