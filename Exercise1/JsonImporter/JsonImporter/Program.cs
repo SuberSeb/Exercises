@@ -1,4 +1,6 @@
-﻿using JsonImporter.Json;
+﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+using JsonImporter.Json;
 using JsonImporter.Models;
 using JsonImporter.Tools;
 using System;
@@ -12,27 +14,36 @@ namespace JsonImporter
 
         private static void Main(string[] args)
         {
-            //Enter number of messages
-            Console.WriteLine("Enter number of messages: ");
-            Console.WriteLine("(About 500 messages will occupy 7.5 Mbytes on disk)");
-            int numberOfMessages = Convert.ToInt32(Console.ReadLine());
+            int numberOfMessages = 500;
 
             //JSON generation
             JsonGenerator jsonGenerator = new JsonGenerator();
             string json = jsonGenerator.Generate(numberOfMessages);
-            Console.WriteLine("JSON generation complete.");
 
-            //Writing generated JSON in fuile
+            //Writing generated JSON in file
             Files.Write(path, json);
-            Console.WriteLine("JSON write to file complete.");
 
-            //Read generated JSON from file
-            JsonParser jsonParser = new JsonParser();
-            List<Message> messages = jsonParser.Parse(Files.Read(path));
-            Console.WriteLine("JSON reading complete.");
+            //Benchmark
+            var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
 
-            Console.WriteLine("Press any button to exit...");
+            Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
+        }        
+    }
+
+    public class ParserBenchmark
+    {
+        private static readonly string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\message.json";
+        private JsonParser jsonParser;
+        private readonly string jsonContent;
+
+        public ParserBenchmark()
+        {
+            jsonParser = new JsonParser();
+            jsonContent = Files.Read(path);
         }
+
+        [Benchmark]
+        public List<Message> Parser() => jsonParser.Parse(jsonContent);
     }
 }
