@@ -152,7 +152,7 @@ namespace JsonImporter.Json
                             writer.WriteLine(jsonResult.ToString());
                             writer.Close();
 
-                            FileInformation.GetFileInfoInLog(path);
+                            FileInformation.GetFileInfoInLog(path + @"\" + fileName);
                             logger.Info("Write to file {path} with {fileName} was successful", path, fileName);
                         }
                         else

@@ -12,20 +12,6 @@ namespace JsonImporter.Tests.Json
         private static readonly string pathInvalid = "some invalid path";
         private static readonly string fileName = "message.json";
 
-        private bool IsJsonValid(string json)
-        {
-            try
-            {
-                var result = JArray.Parse(json);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
-
         private void DeleteFileIfExists()
         {
             try
@@ -33,9 +19,9 @@ namespace JsonImporter.Tests.Json
                 if (File.Exists(Path.Combine(pathValid, fileName)))
                     File.Delete(Path.Combine(pathValid, fileName));
             }
-            catch (IOException ioExp)
+            catch (IOException ex)
             {
-                Console.WriteLine(ioExp.Message);
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -48,7 +34,7 @@ namespace JsonImporter.Tests.Json
             string result = jsonGenerator.GenerateJson(pathValid, fileName, 10);
 
             Assert.NotEmpty(result);
-            Assert.True(IsJsonValid(result));
+            Assert.True(JsonValidator.IsJsonValid(result));
             Assert.True(File.Exists(pathValid + @"\" + fileName));
 
             DeleteFileIfExists();
@@ -63,7 +49,7 @@ namespace JsonImporter.Tests.Json
             string result = jsonGenerator.GenerateJson(pathValid, fileName, -1);
 
             Assert.Empty(result);
-            Assert.False(IsJsonValid(result));
+            Assert.False(JsonValidator.IsJsonValid(result));
             Assert.False(File.Exists(pathValid + @"\" + fileName));
 
             DeleteFileIfExists();
@@ -78,7 +64,7 @@ namespace JsonImporter.Tests.Json
             string result = jsonGenerator.GenerateJson(pathInvalid, fileName, 10);
 
             Assert.Empty(result);
-            Assert.False(IsJsonValid(result));
+            Assert.False(JsonValidator.IsJsonValid(result));
             Assert.False(File.Exists(pathInvalid + @"\" + fileName));
 
             DeleteFileIfExists();
@@ -93,7 +79,7 @@ namespace JsonImporter.Tests.Json
             string result = jsonGenerator.GenerateJson(pathValid, String.Empty, 10);
 
             Assert.Empty(result);
-            Assert.False(IsJsonValid(result));
+            Assert.False(JsonValidator.IsJsonValid(result));
             Assert.False(File.Exists(pathValid + @"\" + String.Empty));
 
             DeleteFileIfExists();

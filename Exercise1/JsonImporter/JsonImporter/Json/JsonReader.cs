@@ -13,28 +13,42 @@ namespace JsonImporter.Json
 
         public async Task ReadJsonAsync(string path)
         {
-            string messages = "";
+            string jsonResult = String.Empty;
 
-            try
+            if(File.Exists(path))
             {
-                using StreamReader reader = new StreamReader(path);
-                messages = await reader.ReadToEndAsync();
-                logger.Info("Reading from file successful");
-            }
-            catch (Exception ex)
-            {
-                logger.Error("Error while reading from file: " + ex);
-            }
+                try
+                {
+                    using StreamReader reader = new StreamReader(path);
+                    jsonResult = await reader.ReadToEndAsync();
+                    logger.Info("Reading from file successful");
 
-            try
-            {
-                var json = JsonConvert.DeserializeObject<List<Message>>(messages);
-                logger.Info("JSON deserialization successful");
+                    if(JsonValidator.IsJsonValid(jsonResult))
+                    {
+                        try
+                        {
+                            var json = JsonConvert.DeserializeObject<List<Message>>(jsonResult);
+                            logger.Info("JSON deserialization successful");
+                        }
+                        catch (JsonException ex)
+                        {
+                            logger.Error("Error while deserialization JSON: " + ex);
+                        }
+                    }                  
+                    else
+                    {
+                        logger.Error("JSON file is not valid");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.Error("Error while reading from file: " + ex);
+                }                               
             }
-            catch (JsonException ex)
+            else
             {
-                logger.Error("Error while deserialization JSON: " + ex);
-            }
+                logger.Error("File does not exist");
+            }            
         }
     }
 }
