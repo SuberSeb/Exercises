@@ -1,7 +1,4 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Engines;
-using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using JsonImporter.Json;
 using JsonImporter.Models;
@@ -11,7 +8,7 @@ using System.Collections.Generic;
 
 namespace JsonImporter
 {
-    internal class Program
+    public class Program
     {
         private static readonly string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\message.json";
 
@@ -32,7 +29,7 @@ namespace JsonImporter
             public List<Message> Parser() => jsonParser.Parse(jsonContent);
         }
 
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             int numberOfMessages = 500;
 
