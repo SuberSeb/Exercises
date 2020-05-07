@@ -1,6 +1,6 @@
 ﻿namespace JsonImporter.Models
 {
-    internal class Detail
+    public class Detail
     {
         public string TeamName { get; set; }
         public string TeamNameInternational { get; set; }

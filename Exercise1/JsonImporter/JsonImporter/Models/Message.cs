@@ -1,6 +1,6 @@
 ﻿namespace JsonImporter.Models
 {
-    internal class Message
+    public class Message
     {
         public string Type { get; set; }
         public int MessageId { get; set; }

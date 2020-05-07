@@ -2,7 +2,7 @@
 
 namespace JsonImporter.Models
 {
-    internal class Player
+    public class Player
     {
         public int Pno { get; set; }
         public int PersonId { get; set; }

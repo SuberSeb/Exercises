@@ -1,9 +1,6 @@
 ﻿using JsonImporter.Models;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace JsonImporter.Json
 {
@@ -11,44 +8,28 @@ namespace JsonImporter.Json
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public async Task ReadJsonAsync(string path)
+        public List<Message> ReadJson(string fileContent)
         {
-            string jsonResult = String.Empty;
+            List<Message> messages = new List<Message>();
 
-            if(File.Exists(path))
+            if (JsonValidator.IsJsonValid(fileContent))
             {
                 try
                 {
-                    using StreamReader reader = new StreamReader(path);
-                    jsonResult = await reader.ReadToEndAsync();
-                    logger.Info("Reading from file successful");
-
-                    if(JsonValidator.IsJsonValid(jsonResult))
-                    {
-                        try
-                        {
-                            var json = JsonConvert.DeserializeObject<List<Message>>(jsonResult);
-                            logger.Info("JSON deserialization successful");
-                        }
-                        catch (JsonException ex)
-                        {
-                            logger.Error("Error while deserialization JSON: " + ex);
-                        }
-                    }                  
-                    else
-                    {
-                        logger.Error("JSON file is not valid");
-                    }
+                    messages = JsonConvert.DeserializeObject<List<Message>>(fileContent);
+                    logger.Info("JSON deserialization successful");
                 }
-                catch (Exception ex)
+                catch (JsonException ex)
                 {
-                    logger.Error("Error while reading from file: " + ex);
-                }                               
+                    logger.Error("Error while deserialization JSON: " + ex);
+                }
             }
             else
             {
-                logger.Error("File does not exist");
-            }            
+                logger.Error("JSON file is not valid");
+            }
+
+            return messages;
         }
     }
 }

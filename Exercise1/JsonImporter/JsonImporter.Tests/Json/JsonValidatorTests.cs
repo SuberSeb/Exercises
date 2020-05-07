@@ -1,5 +1,5 @@
-﻿using Xunit;
-using JsonImporter.Json;
+﻿using JsonImporter.Json;
+using Xunit;
 
 namespace JsonImporter.Tests.Json
 {
@@ -16,9 +16,10 @@ namespace JsonImporter.Tests.Json
 		            'hobbies': ['Java', 'Blogging', 'Reading', 'Xbox', 'LOLCATS']
 	            }
             ]";
+
         private static readonly string jsonWithErrors = @"
             [
-	            
+
 		            'name': 'James',
 		            'hobbies': ['.NET', 'Blogging', 'Reading', 'Xbox', 'LOLCATS']
 	            },
@@ -27,11 +28,11 @@ namespace JsonImporter.Tests.Json
 		            'hobbies': ['Java', 'Blogging', 'Reading', 'Xbox', 'LOLCATS']
 	            }
             ]";
+
         private static readonly string notJson = "some invalid json content";
-        
 
         [Fact]
-        public void JsonValidator_VALID()
+        public void JsonValidator_VALID_ALL()
         {
             Assert.True(JsonValidator.IsJsonValid(jsonValid));
         }
@@ -46,6 +47,12 @@ namespace JsonImporter.Tests.Json
         public void JsonValidator_INVALID_WITH_ERRORS()
         {
             Assert.False(JsonValidator.IsJsonValid(jsonWithErrors));
+        }
+
+        [Fact]
+        public void JsonValidator_INVALID_NULL()
+        {
+            Assert.False(JsonValidator.IsJsonValid(null));
         }
     }
 }

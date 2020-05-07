@@ -1,6 +1,6 @@
 ﻿namespace JsonImporter.Models
 {
-    internal enum YesOrNoEnum : byte
+    public enum YesOrNoEnum : byte
     {
         No,
         Yes

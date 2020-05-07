@@ -133,47 +133,26 @@ namespace JsonImporter.Json
             return messages;
         }
 
-        public string GenerateJson(string path, string fileName, int numberOfMessages)
+        public string GenerateJson(int numberOfMessages)
         {
             string jsonResult = String.Empty;
 
-            if(numberOfMessages >= 1 && Directory.Exists(path) && fileName != String.Empty)
+            if (numberOfMessages >= 1)
             {
                 try
                 {
                     jsonResult = JsonConvert.SerializeObject(CreateMessages(numberOfMessages));
                     logger.Info("JSON was serialized successfully");
-
-                    try
-                    {
-                        if(jsonResult != String.Empty)
-                        {
-                            using var writer = new StreamWriter(path + @"\" + fileName, false);
-                            writer.WriteLine(jsonResult.ToString());
-                            writer.Close();
-
-                            FileInformation.GetFileInfoInLog(path + @"\" + fileName);
-                            logger.Info("Write to file {path} with {fileName} was successful", path, fileName);
-                        }
-                        else
-                        {
-                            logger.Error("Error - writing empty string to file");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error("Error while writing to file {path}: {ex}", path, ex);
-                    }
                 }
                 catch (JsonException ex)
                 {
                     logger.Error("Error while serializing JSON: " + ex);
-                }                
+                }
             }
             else
             {
-                logger.Error("Invalid arguments");
-            }        
+                logger.Error("Invalid number of messages");
+            }
 
             return jsonResult;
         }

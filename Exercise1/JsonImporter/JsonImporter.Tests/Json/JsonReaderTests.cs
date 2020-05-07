@@ -1,34 +1,52 @@
-﻿using System;
+﻿using JsonImporter.Json;
+using JsonImporter.Models;
+using JsonImporter.Tools;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using Xunit;
 
 namespace JsonImporter.Tests.Json
 {
     public class JsonReaderTests
     {
-        [Fact]
-        public void ReadJsonAsync_VALID_ALL()
-        {
+        private static readonly string jsonValidExampleFile =
+            Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\ExampleValid.json";
 
+        private static readonly string jsonInvalidContentExampleFile =
+            Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\ExampleInvalid.json";
+
+        private static readonly string notJson = "some not a JSON content";
+
+        [Fact]
+        public void ReadJson_VALID()
+        {
+            JsonReader jsonReader = new JsonReader();
+            List<Message> result = jsonReader.ReadJson(Files.Read(jsonValidExampleFile));
+
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.True(result.Count == 2);
         }
 
         [Fact]
-        public void ReadJsonAsync_INVALID_PATH()
+        public void ReadJson_INVALID_JSON_CONTENT()
         {
+            JsonReader jsonReader = new JsonReader();
+            List<Message> result = jsonReader.ReadJson(Files.Read(jsonInvalidContentExampleFile));
 
+            Assert.NotNull(result);
+            Assert.Empty(result);
         }
 
         [Fact]
-        public void ReadJsonAsync_INVALID_JSON_CONTENT()
+        public void ReadJson_INVALID_FILE()
         {
+            JsonReader jsonReader = new JsonReader();
+            List<Message> result = jsonReader.ReadJson(notJson);
 
-        }
-
-        [Fact]
-        public void ReadJsonAsync_INVALID_FILE()
-        {
-
+            Assert.NotNull(result);
+            Assert.Empty(result);
         }
     }
 }
