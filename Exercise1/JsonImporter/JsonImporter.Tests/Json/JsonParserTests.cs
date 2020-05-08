@@ -22,9 +22,6 @@ namespace JsonImporter.Tests.Json
         private static readonly string jsonInvalidDate =
             Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\ExampleInvalidDate.json";
 
-        private static readonly string jsonInvalidNull =
-            Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\ExampleInvalidNull.json";
-
         private static readonly string notJson = "some not a JSON content";
 
         [Fact]
@@ -63,6 +60,16 @@ namespace JsonImporter.Tests.Json
         {
             JsonParser jsonReader = new JsonParser();
             List<Message> result = jsonReader.Parse(Files.Read(jsonInvalidDate));
+
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void ReadJson_INVALID_JSON_NULL()
+        {
+            JsonParser jsonReader = new JsonParser();
+            List<Message> result = jsonReader.Parse(null);
 
             Assert.NotNull(result);
             Assert.Empty(result);
