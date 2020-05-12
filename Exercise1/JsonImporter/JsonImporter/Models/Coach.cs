@@ -1,7 +1,10 @@
-﻿namespace JsonImporter.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace JsonImporter.Models
 {
     public class Coach
     {
+        [Key]
         public int PersonId { get; set; }
         public string FamilyName { get; set; }
         public string FirstName { get; set; }

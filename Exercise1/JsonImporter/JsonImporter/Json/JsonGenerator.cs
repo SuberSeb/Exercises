@@ -20,7 +20,7 @@ namespace JsonImporter.Json
                 Player player = new Player
                 {
                     Pno = generator.RandomNumber(1, 100),
-                    PersonId = generator.RandomNumber(1, 1000),
+                    PersonId = generator.RandomNumber(1, 10000000),
                     FamilyName = generator.RandomString(10, false),
                     FirstName = generator.RandomString(15, false),
                     InternationalFamilyName = generator.RandomString(15, false),
@@ -95,10 +95,10 @@ namespace JsonImporter.Json
             return detail;
         }
 
-        private Team[] CreateTeams()
+        private List<Team> CreateTeams()
         {
-            return new Team[]
-            {
+            List<Team> teams = new List<Team>() 
+            { 
                 new Team
                 {
                     TeamNumber = 1,
@@ -116,8 +116,9 @@ namespace JsonImporter.Json
                     Coach = CreateCoach(),
                     AssistCoach1 = CreateCoach(),
                     AssistCoach2 = CreateCoach()
-                }
-            };
+                }};
+
+            return teams;
         }
 
         private List<Message> CreateMessages(int numberOfMessages)

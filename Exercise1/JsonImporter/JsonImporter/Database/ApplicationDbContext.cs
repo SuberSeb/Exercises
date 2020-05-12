@@ -18,7 +18,7 @@ namespace JsonImporter.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=Messages;Username=postgres;Password=06090609");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=JsonImporter;Username=postgres;Password=06090609");
         }
     }
 }

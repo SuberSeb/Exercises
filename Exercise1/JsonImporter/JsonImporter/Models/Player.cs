@@ -1,11 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace JsonImporter.Models
 {
     public class Player
     {
-        public int Pno { get; set; }
+        [Key]
         public int PersonId { get; set; }
+        public int Pno { get; set; }        
         public string FamilyName { get; set; }
         public string FirstName { get; set; }
         public string InternationalFamilyName { get; set; }
