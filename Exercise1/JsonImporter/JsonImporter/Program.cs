@@ -1,6 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using JsonImporter.Database;
 using JsonImporter.Repositories;
 using JsonImporter.Json;
 using JsonImporter.Models;
@@ -35,7 +34,7 @@ namespace JsonImporter
         private static readonly string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         private static readonly string file = desktopPath + @"\message.json";
 
-        public static void GenerateJson()
+        private static void GenerateJson()
         {
             Console.Write("Enter a number of messages to generate (500 messages = 7.5 megabytes): ");
             int numberOfMessages = Convert.ToInt32(Console.ReadLine());
@@ -52,6 +51,7 @@ namespace JsonImporter
         {           
             if (!Directory.GetFiles(desktopPath).Any(f => f == file))
             {
+                Console.WriteLine("Message.json is not exist. File will be created.");
                 GenerateJson();
             }
             else
@@ -82,7 +82,7 @@ namespace JsonImporter
                 case "N":
                     JsonParser jsonParser = new JsonParser();
                     List<Message> messages = jsonParser.Parse(Files.Read(file));
-                    MessageRepository.SaveMessage(messages.Find(p => p.MessageId == 0));
+                    MessageRepository.SaveMessages(messages);
                     break;
                 default:
                     Console.WriteLine("Invalid input. Please try again.");

@@ -2,19 +2,31 @@
 using JsonImporter.Database;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace JsonImporter.Repositories
 {
     class MessageRepository
     {
-        public static void SaveMessage(Message message)
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
+        public static int SaveMessages(List<Message> messages)
         {
-            using (var db = new ApplicationDbContext())
+            try
             {
-                //db.Database.Log = Console.Write;
-                db.Messages.Add(message);
-                db.SaveChanges();
+                using (var db = new ApplicationDbContext())
+                {
+                    foreach(Message message in messages)
+                    {
+                        db.Messages.Add(message);
+                    }
+                    return db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while adding Message to database: " + ex);
+                logger.Error("Error while adding Message to database: " + ex);
+                return 0;
             }
         }
     }

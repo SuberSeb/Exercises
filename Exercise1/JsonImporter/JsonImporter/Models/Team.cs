@@ -6,7 +6,7 @@ namespace JsonImporter.Models
     public class Team
     {
         [Key]
-        public int TeamId { get; set; }
+        public int Id { get; set; }
         public int TeamNumber { get; set; }
         public Detail Detail { get; set; }
         public List<Player> Players { get; set; }

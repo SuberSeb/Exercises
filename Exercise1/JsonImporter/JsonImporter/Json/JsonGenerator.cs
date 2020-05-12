@@ -15,12 +15,11 @@ namespace JsonImporter.Json
         {
             List<Player> players = new List<Player>();
 
-            for (int i = 0; i < numberOfPlayers; i++)
+            for (int i = 1; i < numberOfPlayers + 1; i++)
             {
                 Player player = new Player
                 {
                     Pno = generator.RandomNumber(1, 100),
-                    PersonId = generator.RandomNumber(1, 10000000),
                     FamilyName = generator.RandomString(10, false),
                     FirstName = generator.RandomString(15, false),
                     InternationalFamilyName = generator.RandomString(15, false),
@@ -53,7 +52,6 @@ namespace JsonImporter.Json
         {
             Coach coach = new Coach
             {
-                PersonId = generator.RandomNumber(1, 100),
                 FamilyName = generator.RandomString(10, false),
                 FirstName = generator.RandomString(15, false),
                 InternationalFamilyName = generator.RandomString(15, false),
@@ -76,7 +74,6 @@ namespace JsonImporter.Json
             {
                 TeamName = generator.RandomString(10, false),
                 TeamNameInternational = generator.RandomString(10, false),
-                TeamId = generator.RandomNumber(1, 1000),
                 ExternalId = generator.RandomString(10, false),
                 InternationalReference = generator.RandomString(10, false),
                 TeamNickname = generator.RandomString(10, false),
@@ -127,7 +124,7 @@ namespace JsonImporter.Json
 
             for (int i = 0; i < numberOfMessages; i++)
             {
-                messages.Add(new Message { MessageId = i, Type = "Message type", Teams = CreateTeams() });
+                messages.Add(new Message { Type = "Message type", Teams = CreateTeams() });
             }
 
             return messages;

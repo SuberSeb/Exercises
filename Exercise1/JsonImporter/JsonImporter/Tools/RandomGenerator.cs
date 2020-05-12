@@ -1,16 +1,26 @@
 ﻿using JsonImporter.Models;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace JsonImporter.Tools
 {
     internal class RandomGenerator
     {
+        private int lastNumber;
+
         public int RandomNumber(int min, int max)
         {
             Random random = new Random();
 
-            return random.Next(min, max);
+            var value = random.Next(min, max);
+
+            return value;
+        }
+
+        public int IncrementalNumber()
+        {
+            return lastNumber++;
         }
 
         public YesOrNoEnum RandomEnum(int probability)
