@@ -119,15 +119,15 @@ namespace JsonImporter
                             Console.Write("Chunk size: ");
                             int chunkSize = Convert.ToInt32(Console.ReadLine());
                             var chunks = messages.Chunk(chunkSize);
-                            foreach(var chunk in chunks)
-                                MessageRepository.SaveMessages(chunk.ToList());
+                            foreach (var chunk in chunks)
+                                //MessageRepository.SaveMessages(chunk.ToList());
+                                MessageRepository.SaveMessagesBulk(chunk.ToList());                            
                             break;
                         default:
                             Console.WriteLine("Invalid input. Please try again.");
                             Environment.Exit(1);
                             break;
-                    }                    
-                    
+                    }
                     break;
                 default:
                     Console.WriteLine("Invalid input. Please try again.");
