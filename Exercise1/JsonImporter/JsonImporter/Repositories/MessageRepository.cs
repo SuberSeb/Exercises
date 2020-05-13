@@ -15,17 +15,20 @@ namespace JsonImporter.Repositories
             {
                 using (var db = new ApplicationDbContext())
                 {
-                    foreach(Message message in messages)
-                    {
-                        db.Messages.Add(message);
-                    }
-                    return db.SaveChanges();
+                    db.Messages.AddRange(messages);
+                    int messagesAdded = db.SaveChanges();
+
+                    Console.WriteLine($"{messagesAdded} rows was successfully added to database.");
+                    logger.Info($"{messagesAdded} rows was successfully added to database.");
+
+                    return messagesAdded;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error while adding Message to database: " + ex);
-                logger.Error("Error while adding Message to database: " + ex);
+                Console.WriteLine("Error while adding messages to database: " + ex);
+                logger.Error("Error while adding messages to database: " + ex);
+
                 return 0;
             }
         }

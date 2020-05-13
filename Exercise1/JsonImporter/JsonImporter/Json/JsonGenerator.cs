@@ -124,7 +124,7 @@ namespace JsonImporter.Json
 
             for (int i = 0; i < numberOfMessages; i++)
             {
-                messages.Add(new Message { Type = "Message type", Teams = CreateTeams() });
+                messages.Add(new Message { Type = "Message type " + generator.RandomString(10, false), Teams = CreateTeams() });
             }
 
             return messages;
