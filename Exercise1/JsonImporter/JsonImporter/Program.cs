@@ -116,7 +116,9 @@ namespace JsonImporter
                             var summaryDbImporter = BenchmarkRunner.Run<DbImporterBenchmark>();
                             break;
                         case "N":
-                            MessageRepository.SaveMessages(messages);
+                            var chunks = messages.Chunk(100);
+                            foreach(var chunk in chunks)
+                                MessageRepository.SaveMessages(chunk.ToList());
                             break;
                         default:
                             Console.WriteLine("Invalid input. Please try again.");
