@@ -116,7 +116,9 @@ namespace JsonImporter
                             var summaryDbImporter = BenchmarkRunner.Run<DbImporterBenchmark>();
                             break;
                         case "N":
-                            var chunks = messages.Chunk(100);
+                            Console.Write("Chunk size: ");
+                            int chunkSize = Convert.ToInt32(Console.ReadLine());
+                            var chunks = messages.Chunk(chunkSize);
                             foreach(var chunk in chunks)
                                 MessageRepository.SaveMessages(chunk.ToList());
                             break;
