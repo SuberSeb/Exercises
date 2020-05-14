@@ -5,7 +5,7 @@ namespace JsonImporter.Models
     public class Detail
     {
         [Key]
-        public int TeamId { get; set; }
+        public int DetailId { get; set; }
         public string TeamName { get; set; }
         public string TeamNameInternational { get; set; }        
         public string ExternalId { get; set; }
