@@ -24,8 +24,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Queue\" />
-  </ItemGroup>
-
 </Project>

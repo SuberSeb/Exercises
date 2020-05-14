@@ -2,21 +2,22 @@
 using JsonImporter.Json;
 using JsonImporter.Models;
 using JsonImporter.Repositories;
+using JsonImporter.Tools;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using static JsonImporter.Benchmark.PerformanceTest;
 
-namespace JsonImporter.Tools
+namespace JsonImporter.Menu
 {
-    internal class Menu
+    internal class MenuMain
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         private static readonly string file = desktopPath + @"\message.json";
 
-        private static void GenerateJsonDialog()
+        private static void ShowGenerateJsonDialog()
         {
             int numberOfMessages = 0;
             Console.Write("Enter a number of messages to generate (500 messages = 7.5 megabytes): ");
@@ -42,7 +43,7 @@ namespace JsonImporter.Tools
             if (!Directory.GetFiles(desktopPath).Any(f => f == file))
             {
                 Console.WriteLine("Message.json is not exist. File will be created.");
-                GenerateJsonDialog();
+                ShowGenerateJsonDialog();
             }
             else
             {
@@ -51,7 +52,7 @@ namespace JsonImporter.Tools
                 switch (result)
                 {
                     case "Y":
-                        GenerateJsonDialog();
+                        ShowGenerateJsonDialog();
                         break;
 
                     case "N":

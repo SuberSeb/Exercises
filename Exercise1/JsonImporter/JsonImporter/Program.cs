@@ -1,7 +1,7 @@
 ﻿using JsonImporter.Models;
 using JsonImporter.Tools;
 using System;
-using System.Collections.Generic;
+using JsonImporter.Menu;
 
 namespace JsonImporter
 {
@@ -9,9 +9,8 @@ namespace JsonImporter
     {
         public static void Main(string[] args)
         {
-            Menu.ShowMessageCreateDialog();
-            List<Message> messages = Menu.ShowJsonParserDialog();
-            Menu.ShowDatabaseImportDialog(messages);
+            MenuMain.ShowMessageCreateDialog();
+            MenuMain.ShowDatabaseImportDialog(MenuMain.ShowJsonParserDialog());
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
