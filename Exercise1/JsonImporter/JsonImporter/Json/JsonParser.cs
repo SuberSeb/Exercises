@@ -6,7 +6,7 @@ namespace JsonImporter.Json
 {
     public class JsonParser
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         public List<Message> Parse(string fileContent)
         {

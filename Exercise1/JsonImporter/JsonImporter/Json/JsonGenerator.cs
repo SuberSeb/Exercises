@@ -8,7 +8,7 @@ namespace JsonImporter.Json
 {
     public class JsonGenerator
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly RandomGenerator generator = new RandomGenerator();
 
         private List<Player> CreatePlayersList(int numberOfPlayers)

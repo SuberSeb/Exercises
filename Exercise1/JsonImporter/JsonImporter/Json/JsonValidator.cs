@@ -5,7 +5,7 @@ namespace JsonImporter.Json
 {
     public class JsonValidator
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         public static bool IsJsonValid(string json)
         {

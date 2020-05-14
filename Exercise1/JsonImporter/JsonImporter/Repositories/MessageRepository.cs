@@ -8,7 +8,7 @@ namespace JsonImporter.Repositories
 {
     internal class MessageRepository
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         public static int SaveMessages(List<Message> messages)
         {

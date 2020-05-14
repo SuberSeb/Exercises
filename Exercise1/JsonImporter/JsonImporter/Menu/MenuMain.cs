@@ -71,8 +71,8 @@ namespace JsonImporter.Menu
             List<Message> messages = new List<Message>();
 
             Console.Write("Would you like to run benchmark for JSON parser? Y/N: ");
-            var jsonSelection = Console.ReadLine();
-            switch (jsonSelection)
+            var selection = Console.ReadLine();
+            switch (selection)
             {
                 case "Y":
                     BenchmarkRunner.Run<ParserBenchmark>();
@@ -95,8 +95,8 @@ namespace JsonImporter.Menu
         public static void ShowDatabaseImportDialog(List<Message> messages)
         {
             Console.Write("Would you like to run benchmark for database importer? Y/N: ");
-            var importerSelection = Console.ReadLine();
-            switch (importerSelection)
+            var selection = Console.ReadLine();
+            switch (selection)
             {
                 case "Y":
                     BenchmarkRunner.Run<DbImporterBenchmark>();
@@ -112,6 +112,22 @@ namespace JsonImporter.Menu
 
                 default:
                     Console.WriteLine("Invalid input. Please try again.");
+                    Environment.Exit(1);
+                    break;
+            }
+        }
+
+        public static void ShowDeleteMessageFileDialog()
+        {
+            Console.Write("Would you like to delete generated message.json file? Press Y to delete: ");
+            var importerSelection = Console.ReadLine();
+            switch (importerSelection)
+            {
+                case "Y":
+                    File.Delete(file);
+                    break;
+                default:
+                    Console.WriteLine("Invalid input. Exiting.");
                     Environment.Exit(1);
                     break;
             }
