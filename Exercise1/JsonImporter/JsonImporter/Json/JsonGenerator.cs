@@ -94,8 +94,8 @@ namespace JsonImporter.Json
 
         private List<Team> CreateTeams()
         {
-            List<Team> teams = new List<Team>() 
-            { 
+            List<Team> teams = new List<Team>()
+            {
                 new Team
                 {
                     TeamNumber = 1,

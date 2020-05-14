@@ -10,7 +10,7 @@ using static JsonImporter.Benchmark.PerformanceTest;
 
 namespace JsonImporter.Tools
 {
-    class Menu
+    internal class Menu
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -53,8 +53,10 @@ namespace JsonImporter.Tools
                     case "Y":
                         GenerateJsonDialog();
                         break;
+
                     case "N":
                         break;
+
                     default:
                         Console.WriteLine("Invalid input. Please try again.");
                         Environment.Exit(1);
@@ -74,10 +76,12 @@ namespace JsonImporter.Tools
                 case "Y":
                     BenchmarkRunner.Run<ParserBenchmark>();
                     break;
+
                 case "N":
                     JsonParser jsonParser = new JsonParser();
                     messages = jsonParser.Parse(Files.Read(file));
                     break;
+
                 default:
                     Console.WriteLine("Invalid input. Please try again.");
                     Environment.Exit(1);
@@ -96,6 +100,7 @@ namespace JsonImporter.Tools
                 case "Y":
                     BenchmarkRunner.Run<DbImporterBenchmark>();
                     break;
+
                 case "N":
                     Console.Write("Chunk size: ");
                     int chunkSize = Convert.ToInt32(Console.ReadLine());
@@ -103,6 +108,7 @@ namespace JsonImporter.Tools
                     foreach (var chunk in chunks)
                         MessageRepository.SaveMessagesBulk(chunk.ToList());
                     break;
+
                 default:
                     Console.WriteLine("Invalid input. Please try again.");
                     Environment.Exit(1);

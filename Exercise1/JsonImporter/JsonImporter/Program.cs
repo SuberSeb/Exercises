@@ -1,8 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
-using JsonImporter.Repositories;
-using JsonImporter.Json;
-using JsonImporter.Models;
+﻿using JsonImporter.Models;
 using JsonImporter.Tools;
 using System;
 using System.Collections.Generic;
@@ -20,5 +16,5 @@ namespace JsonImporter
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
-    }    
+    }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace JsonImporter.Tools
 {
-    static class ListSplitter
+    internal static class ListSplitter
     {
         public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> list, int chunkSize)
         {

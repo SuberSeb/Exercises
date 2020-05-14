@@ -7,7 +7,8 @@ namespace JsonImporter.Models
     {
         [Key]
         public int MessageId { get; set; }
-        public string Type { get; set; }        
+
+        public string Type { get; set; }
         public List<Team> Teams { get; set; }
     }
 }

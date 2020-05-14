@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JsonImporter.Database
 {
-    class ApplicationDbContext : DbContext
+    internal class ApplicationDbContext : DbContext
     {
         public DbSet<Coach> Coaches { get; set; }
         public DbSet<Detail> Details { get; set; }

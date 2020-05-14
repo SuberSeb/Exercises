@@ -1,12 +1,12 @@
-﻿using JsonImporter.Models;
-using JsonImporter.Database;
+﻿using JsonImporter.Database;
+using JsonImporter.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace JsonImporter.Repositories
 {
-    class MessageRepository
+    internal class MessageRepository
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -51,14 +51,14 @@ namespace JsonImporter.Repositories
                     clock.Stop();
 
                     Console.WriteLine($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
-                    logger.Info($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");                    
+                    logger.Info($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error while adding messages to database: " + ex);
                 logger.Error("Error while adding messages to database: " + ex);
-            }            
+            }
         }
     }
 }

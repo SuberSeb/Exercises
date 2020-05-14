@@ -7,7 +7,8 @@ namespace JsonImporter.Models
     {
         [Key]
         public int PersonId { get; set; }
-        public int Pno { get; set; }        
+
+        public int Pno { get; set; }
         public string FamilyName { get; set; }
         public string FirstName { get; set; }
         public string InternationalFamilyName { get; set; }
