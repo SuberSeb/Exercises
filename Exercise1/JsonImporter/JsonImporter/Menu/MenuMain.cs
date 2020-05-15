@@ -132,5 +132,10 @@ namespace JsonImporter.Menu
                     break;
             }
         }
+
+        public static void ShowSendToKafkaDialog()
+        {
+
+        }
     }
 }
