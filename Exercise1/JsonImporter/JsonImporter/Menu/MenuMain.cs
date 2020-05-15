@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Running;
 using JsonImporter.Json;
 using JsonImporter.Models;
+using JsonImporter.Queue;
 using JsonImporter.Repositories;
 using JsonImporter.Tools;
 using System;
@@ -106,8 +107,13 @@ namespace JsonImporter.Menu
                     Console.Write("Chunk size: ");
                     int chunkSize = Convert.ToInt32(Console.ReadLine());
                     var chunks = messages.Chunk(chunkSize);
+                    
                     foreach (var chunk in chunks)
-                        MessageRepository.SaveMessagesBulk(chunk.ToList());
+                    {
+                        //MessageRepository.SaveMessagesBulk(chunk.ToList());
+                        Producer.SendToKafka(chunk.ToList());
+                    }  
+                    
                     break;
 
                 default:
@@ -119,7 +125,7 @@ namespace JsonImporter.Menu
 
         public static void ShowDeleteMessageFileDialog()
         {
-            Console.Write("Would you like to delete generated message.json file? Press Y to delete: ");
+            Console.Write("Would you like to delete generated message.json file? Press Y to delete, any button to exit: ");
             var importerSelection = Console.ReadLine();
             switch (importerSelection)
             {
@@ -127,15 +133,10 @@ namespace JsonImporter.Menu
                     File.Delete(file);
                     break;
                 default:
-                    Console.WriteLine("Invalid input. Exiting.");
+                    Console.WriteLine("Exiting.");
                     Environment.Exit(1);
                     break;
             }
-        }
-
-        public static void ShowSendToKafkaDialog()
-        {
-
         }
     }
 }

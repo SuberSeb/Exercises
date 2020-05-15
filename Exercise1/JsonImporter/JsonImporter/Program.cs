@@ -1,8 +1,4 @@
-﻿using JsonImporter.Models;
-using JsonImporter.Tools;
-using System;
-using JsonImporter.Menu;
-using JsonImporter.Queue;
+﻿using JsonImporter.Menu;
 
 namespace JsonImporter
 {
@@ -10,20 +6,9 @@ namespace JsonImporter
     {
         public static void Main(string[] args)
         {
-            //MenuMain.ShowMessageCreateDialog();
-            //MenuMain.ShowDatabaseImportDialog(MenuMain.ShowJsonParserDialog());
-            //ApacheKafka
-            //MenuMain.ShowDeleteMessageFileDialog();
-
-            for (int i = 0; i < 100; i++)
-            {
-                Console.WriteLine("Send 10 messages");
-                Console.ReadKey();
-                Producer.SendToKafka();
-            }            
-
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+            MenuMain.ShowMessageCreateDialog();
+            MenuMain.ShowDatabaseImportDialog(MenuMain.ShowJsonParserDialog());
+            MenuMain.ShowDeleteMessageFileDialog();
         }
     }
 }

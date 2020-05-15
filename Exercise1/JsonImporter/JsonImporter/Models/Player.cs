@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JsonImporter.Models
 {
+    [Serializable]
     public class Player
     {
         [Key]
