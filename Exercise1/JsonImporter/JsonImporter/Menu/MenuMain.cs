@@ -125,7 +125,7 @@ namespace JsonImporter.Menu
 
         public static void ShowDeleteMessageFileDialog()
         {
-            Console.Write("Would you like to delete generated message.json file? Press Y to delete, any button to exit: ");
+            Console.Write("Would you like to delete generated message.json file? Y/N: ");
             var importerSelection = Console.ReadLine();
             switch (importerSelection)
             {

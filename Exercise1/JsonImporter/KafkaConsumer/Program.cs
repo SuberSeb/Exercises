@@ -10,6 +10,7 @@ namespace KafkaConsumer
         static void Main(string[] args)
         {
             Console.WriteLine("Starting Apache Kafka consumer...");
+            Console.WriteLine();
 
             var config = new ConsumerConfig
             {
@@ -34,10 +35,9 @@ namespace KafkaConsumer
                     {
                         try
                         {
-                            var cr = consumer.Consume(cts.Token);
-                            Console.WriteLine($"Message recieved in: {cr.Message.Timestamp}");
-                            Console.WriteLine(Serializer.DeserializeMessage(cr.Message.Value));
-                            Console.WriteLine();
+                            var message = consumer.Consume(cts.Token);
+                            Console.WriteLine($"{message.Message.Timestamp.UtcDateTime.ToLocalTime()}: " +
+                                $"{Serializer.DeserializeMessage(message.Message.Value)}");
                         }
                         catch (ConsumeException e)
                         {
