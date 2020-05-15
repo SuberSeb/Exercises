@@ -133,6 +133,9 @@ namespace JsonImporter.Menu
                     File.Delete(file);
                     break;
 
+                case "N":
+                    break;
+
                 default:
                     Console.WriteLine("Exiting.");
                     Environment.Exit(1);
