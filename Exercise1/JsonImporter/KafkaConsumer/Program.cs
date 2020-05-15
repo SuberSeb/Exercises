@@ -37,6 +37,7 @@ namespace KafkaConsumer
                     break;
             }
             Console.WriteLine();
+            Console.WriteLine("Press Ctrl+C to exit.");
             Console.WriteLine("Listening...");
             Console.WriteLine();
 
@@ -80,6 +81,9 @@ namespace KafkaConsumer
                     consumer.Close();
                 }
             }
+
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
         }
     }
 }

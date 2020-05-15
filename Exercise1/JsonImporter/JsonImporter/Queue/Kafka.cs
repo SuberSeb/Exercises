@@ -12,7 +12,7 @@ namespace JsonImporter.Queue
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly string topicName = "messages-topic";
 
-        public static void SendMessage(List<Message> messages)
+        public static void SendMessages(List<Message> messages)
         {
             var config = new ProducerConfig { BootstrapServers = "localhost:9092" };
 

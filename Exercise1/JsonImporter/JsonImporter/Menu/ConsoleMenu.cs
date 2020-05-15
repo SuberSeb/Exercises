@@ -30,7 +30,7 @@ namespace JsonImporter.Menu
             {
                 Console.WriteLine("Invalid number of messages.");
                 logger.Error("Invalid number of messages: " + ex);
-                Environment.Exit(1);
+                ShowExitDialog();
             }
 
             JsonGenerator jsonGenerator = new JsonGenerator();
@@ -61,7 +61,7 @@ namespace JsonImporter.Menu
 
                     default:
                         Console.WriteLine("Invalid input. Please try again.");
-                        Environment.Exit(1);
+                        ShowExitDialog();
                         break;
                 }
             }
@@ -69,56 +69,48 @@ namespace JsonImporter.Menu
 
         public static List<Message> ShowJsonParserDialog()
         {
-            List<Message> messages = new List<Message>();
-
-            Console.Write("Would you like to run benchmark for JSON parser? Y/N: ");
-            var selection = Console.ReadLine();
-            switch (selection)
-            {
-                case "Y":
-                    BenchmarkRunner.Run<ParserBenchmark>();
-                    break;
-
-                case "N":
-                    JsonParser jsonParser = new JsonParser();
-                    messages = jsonParser.Parse(Files.Read(file));
-                    break;
-
-                default:
-                    Console.WriteLine("Invalid input. Please try again.");
-                    Environment.Exit(1);
-                    break;
-            }
+            JsonParser jsonParser = new JsonParser();
+            List<Message> messages = jsonParser.Parse(Files.Read(file));
 
             return messages;
         }
 
         public static void ShowImporterDialog(List<Message> messages)
         {
-            Console.Write("Would you like to run benchmark for database importer? Y/N: ");
-            var selection = Console.ReadLine();
-            switch (selection)
+            Console.Write("Chunk size: ");
+            int chunkSize = Convert.ToInt32(Console.ReadLine());
+            var chunks = messages.Chunk(chunkSize);
+
+            foreach (var chunk in chunks)
             {
-                case "Y":
-                    BenchmarkRunner.Run<DbImporterBenchmark>();
+                MessageRepository.SaveMessagesBulk(chunk.ToList());
+                Kafka.SendMessages(chunk.ToList());
+            }
+        }
+
+        public static void ShowBenchmarkDialog()
+        {
+            Console.WriteLine("Would you like to run benchmark?");
+            Console.Write("Choose and type Parser/Database/Kafka: ");
+            var selection = Console.ReadLine();
+            switch(selection)
+            {
+                case "Parser":
+                    BenchmarkRunner.Run<ParserBenchmark>();
+                    ShowExitDialog();
                     break;
 
-                case "N":
-                    Console.Write("Chunk size: ");
-                    int chunkSize = Convert.ToInt32(Console.ReadLine());
-                    var chunks = messages.Chunk(chunkSize);
+                case "Database":
+                    BenchmarkRunner.Run<DbImporterBenchmark>();
+                    ShowExitDialog();
+                    break;
 
-                    foreach (var chunk in chunks)
-                    {
-                        MessageRepository.SaveMessagesBulk(chunk.ToList());
-                        Kafka.SendMessage(chunk.ToList());
-                    }
-
+                case "Kafka":
+                    BenchmarkRunner.Run<KafkaBenchmark>();
+                    ShowExitDialog();
                     break;
 
                 default:
-                    Console.WriteLine("Invalid input. Please try again.");
-                    Environment.Exit(1);
                     break;
             }
         }
@@ -137,10 +129,16 @@ namespace JsonImporter.Menu
                     break;
 
                 default:
-                    Console.WriteLine("Exiting.");
-                    Environment.Exit(1);
+                    ShowExitDialog();
                     break;
             }
+        }
+
+        private static void ShowExitDialog()
+        {
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
+            Environment.Exit(1);
         }
     }
 }
