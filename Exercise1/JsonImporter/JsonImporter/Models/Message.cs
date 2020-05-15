@@ -12,5 +12,10 @@ namespace JsonImporter.Models
 
         public string Type { get; set; }
         public List<Team> Teams { get; set; }
+
+        public override string ToString()
+        {
+            return $"{MessageId},{Type},[{Teams}]";
+        }
     }
 }

@@ -16,5 +16,10 @@ namespace JsonImporter.Models
         public Coach Coach { get; set; }
         public Coach AssistCoach1 { get; set; }
         public Coach AssistCoach2 { get; set; }
+
+        public override string ToString()
+        {
+            return $"[{Id},{Detail},{Players},{Coach},{AssistCoach1},{AssistCoach2}]";
+        }
     }
 }

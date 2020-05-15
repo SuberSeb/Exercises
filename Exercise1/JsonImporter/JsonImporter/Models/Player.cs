@@ -30,5 +30,15 @@ namespace JsonImporter.Models
         public string NationalityCode { get; set; }
         public string NationalityCodeIOC { get; set; }
         public string Nationality { get; set; }
+
+        public override string ToString()
+        {
+            return $"[{PersonId},{Pno},{FamilyName},{FirstName}," +
+                $"{InternationalFamilyName},{InternationalFirstName},{ScoreboardName},{TVName}," +
+                $"{NickName},{Website},{DateOfBirth},{Height}," +
+                $"{ExternalId},{InternationalReference},{ShirtNumber},{PlayingPosition}," +
+                $"{(int)Starter},{(int)Captain},{(int)Active},{NationalityCode}," +
+                $"{NationalityCodeIOC},{Nationality}]";
+        }
     }
 }

@@ -93,7 +93,7 @@ namespace JsonImporter.Menu
             return messages;
         }
 
-        public static void ShowDatabaseImportDialog(List<Message> messages)
+        public static void ShowImporterDialog(List<Message> messages)
         {
             Console.Write("Would you like to run benchmark for database importer? Y/N: ");
             var selection = Console.ReadLine();

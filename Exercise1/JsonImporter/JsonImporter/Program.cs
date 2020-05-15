@@ -12,7 +12,7 @@ namespace JsonImporter
             do
             {
                 ConsoleMenu.ShowMessageCreateDialog();
-                ConsoleMenu.ShowDatabaseImportDialog(ConsoleMenu.ShowJsonParserDialog());
+                ConsoleMenu.ShowImporterDialog(ConsoleMenu.ShowJsonParserDialog());
                 ConsoleMenu.ShowDeleteMessageFileDialog();
 
                 Console.WriteLine();

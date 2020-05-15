@@ -24,5 +24,13 @@ namespace JsonImporter.Models
         public string Country { get; set; }
         public string Website { get; set; }
         public YesOrNoEnum IsHomeCompetitor { get; set; }
+
+        public override string ToString()
+        {
+            return $"[{DetailId},{TeamName},{TeamNameInternational},{ExternalId}," +
+                $"{InternationalReference},{TeamNickname},{TeamCode},{TeamCodeLong}," +
+                $"{TeamCodeInternational},{TeamCodeLongInternational},{TeamNameInternational},{CountryCode}," +
+                $"{CountryCodeIOC},{Country},{Website},{(int)IsHomeCompetitor}]";
+        }
     }
 }
