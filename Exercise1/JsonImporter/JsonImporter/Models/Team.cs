@@ -19,7 +19,7 @@ namespace JsonImporter.Models
 
         public override string ToString()
         {
-            return $"[{Id},{Detail},{Players},{Coach},{AssistCoach1},{AssistCoach2}]";
+            return $"[{Id},{Detail},{string.Join(",", Players)},{Coach},{AssistCoach1},{AssistCoach2}]";
         }
     }
 }

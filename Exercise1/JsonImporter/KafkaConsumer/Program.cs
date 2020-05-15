@@ -11,15 +11,34 @@ namespace KafkaConsumer
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("Starting Apache Kafka consumer...");
-            Console.WriteLine();
-
             var config = new ConsumerConfig
             {
                 GroupId = "messages-consumers",
                 BootstrapServers = "localhost:9092",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
+
+            Console.Write("Would you like to see message content? Y/N: ");
+            var selection = Console.ReadLine();
+            var result = string.Empty;
+            switch (selection)
+            {
+                case "Y":
+                    result = selection;
+                    break;
+
+                case "N":
+                    result = selection;
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid input. Messages content no will be shown.");
+                    result = "N";
+                    break;
+            }
+            Console.WriteLine();
+            Console.WriteLine("Listening...");
+            Console.WriteLine();
 
             using (var consumer = new ConsumerBuilder<Ignore, byte[]>(config).Build())
             {
@@ -39,8 +58,16 @@ namespace KafkaConsumer
                         try
                         {
                             var message = consumer.Consume(cts.Token);
-                            Console.WriteLine($"{message.Message.Timestamp.UtcDateTime.ToLocalTime()}: " +
+                            if (result == "Y")
+                            {
+                                Console.WriteLine($"{message.Message.Timestamp.UtcDateTime.ToLocalTime()}: " +
                                 $"{Serializer.DeserializeMessage(message.Message.Value)}");
+                                Console.WriteLine();
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{message.Message.Timestamp.UtcDateTime.ToLocalTime()}: message received.");
+                            }
                         }
                         catch (ConsumeException e)
                         {
