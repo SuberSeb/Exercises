@@ -107,13 +107,13 @@ namespace JsonImporter.Menu
                     Console.Write("Chunk size: ");
                     int chunkSize = Convert.ToInt32(Console.ReadLine());
                     var chunks = messages.Chunk(chunkSize);
-                    
+
                     foreach (var chunk in chunks)
                     {
-                        //MessageRepository.SaveMessagesBulk(chunk.ToList());
+                        MessageRepository.SaveMessagesBulk(chunk.ToList());
                         Producer.SendToKafka(chunk.ToList());
-                    }  
-                    
+                    }
+
                     break;
 
                 default:
@@ -132,6 +132,7 @@ namespace JsonImporter.Menu
                 case "Y":
                     File.Delete(file);
                     break;
+
                 default:
                     Console.WriteLine("Exiting.");
                     Environment.Exit(1);

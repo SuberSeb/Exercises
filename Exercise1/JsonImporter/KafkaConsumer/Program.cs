@@ -5,9 +5,9 @@ using System.Threading;
 
 namespace KafkaConsumer
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("Starting Apache Kafka consumer...");
             Console.WriteLine();
@@ -24,7 +24,8 @@ namespace KafkaConsumer
                 consumer.Subscribe("messages-topic");
 
                 CancellationTokenSource cts = new CancellationTokenSource();
-                Console.CancelKeyPress += (_, e) => {
+                Console.CancelKeyPress += (_, e) =>
+                {
                     e.Cancel = true;
                     cts.Cancel();
                 };

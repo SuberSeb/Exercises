@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace JsonImporter.Queue
 {
-    class Producer
+    internal class Producer
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -16,7 +16,7 @@ namespace JsonImporter.Queue
 
             Action<DeliveryReport<Null, byte[]>> handler = r =>
             {
-                if(!r.Error.IsError)
+                if (!r.Error.IsError)
                 {
                     Console.WriteLine($"Delivered message to {r.TopicPartitionOffset}");
                     logger.Info($"Delivered message to {r.TopicPartitionOffset}");
@@ -26,7 +26,7 @@ namespace JsonImporter.Queue
                     Console.WriteLine($"Delivery Error: {r.Error.Reason}");
                     logger.Error($"Delivery Error: {r.Error.Reason}");
                 }
-            };                
+            };
 
             try
             {

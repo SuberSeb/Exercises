@@ -15,7 +15,7 @@ namespace JsonImporter.Tools
             {
                 logger.Error("Can't serialize object: null");
                 return null;
-            }                
+            }
 
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             try
@@ -31,7 +31,7 @@ namespace JsonImporter.Tools
             {
                 logger.Error("Error while serializing object: " + ex);
                 return null;
-            }            
+            }
         }
 
         public static Message DeserializeMessage(byte[] serializedMessage)
