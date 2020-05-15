@@ -1,6 +1,8 @@
 ﻿using JsonImporter.Models;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace JsonImporter.Json
 {
@@ -16,8 +18,12 @@ namespace JsonImporter.Json
             {
                 try
                 {
+                    var timer = new Stopwatch();
+                    timer.Start();
                     messages = JsonConvert.DeserializeObject<List<Message>>(fileContent);
-                    logger.Info("JSON deserialization successful");
+                    timer.Stop();
+                    Console.WriteLine($"JSON deserialization successful. Elapsed time: {timer.ElapsedMilliseconds} ms");
+                    logger.Info($"JSON deserialization successful. Elapsed time: {timer.ElapsedMilliseconds} ms");
                 }
                 catch (JsonException ex)
                 {

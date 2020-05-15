@@ -12,7 +12,7 @@ using static JsonImporter.Benchmark.PerformanceTest;
 
 namespace JsonImporter.Menu
 {
-    internal class MenuMain
+    internal class ConsoleMenu
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -111,7 +111,7 @@ namespace JsonImporter.Menu
                     foreach (var chunk in chunks)
                     {
                         MessageRepository.SaveMessagesBulk(chunk.ToList());
-                        Producer.SendToKafka(chunk.ToList());
+                        Kafka.SendMessage(chunk.ToList());
                     }
 
                     break;

@@ -12,19 +12,19 @@ namespace JsonImporter.Repositories
 
         public static int SaveMessages(List<Message> messages)
         {
-            var clock = new Stopwatch();
+            var timer = new Stopwatch();
 
             try
             {
                 using (var db = new ApplicationDbContext())
                 {
-                    clock.Start();
+                    timer.Start();
                     db.Messages.AddRange(messages);
                     int messagesAdded = db.SaveChanges();
-                    clock.Stop();
+                    timer.Stop();
 
-                    Console.WriteLine($"{messagesAdded} rows was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
-                    logger.Info($"{messagesAdded} rows was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
+                    Console.WriteLine($"{messagesAdded} rows was successfully added to database. Elapsed time: {timer.ElapsedMilliseconds} ms.");
+                    logger.Info($"{messagesAdded} rows was successfully added to database. Elapsed time: {timer.ElapsedMilliseconds} ms.");
 
                     return messagesAdded;
                 }

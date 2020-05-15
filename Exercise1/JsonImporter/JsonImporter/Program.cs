@@ -11,15 +11,15 @@ namespace JsonImporter
 
             do
             {
-                MenuMain.ShowMessageCreateDialog();
-                MenuMain.ShowDatabaseImportDialog(MenuMain.ShowJsonParserDialog());
-                MenuMain.ShowDeleteMessageFileDialog();
+                ConsoleMenu.ShowMessageCreateDialog();
+                ConsoleMenu.ShowDatabaseImportDialog(ConsoleMenu.ShowJsonParserDialog());
+                ConsoleMenu.ShowDeleteMessageFileDialog();
 
                 Console.WriteLine();
                 Console.WriteLine("Do it again? Press Esc to exit.");
                 buttonPressed = Console.ReadKey();
             }
-            while (buttonPressed.Key != ConsoleKey.Escape);            
+            while (buttonPressed.Key != ConsoleKey.Escape);
         }
     }
 }

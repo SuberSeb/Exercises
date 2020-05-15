@@ -7,6 +7,8 @@ namespace KafkaConsumer
 {
     internal class Program
     {
+        private static readonly string topicName = "messages-topic";
+
         private static void Main(string[] args)
         {
             Console.WriteLine("Starting Apache Kafka consumer...");
@@ -21,7 +23,7 @@ namespace KafkaConsumer
 
             using (var consumer = new ConsumerBuilder<Ignore, byte[]>(config).Build())
             {
-                consumer.Subscribe("messages-topic");
+                consumer.Subscribe(topicName);
 
                 CancellationTokenSource cts = new CancellationTokenSource();
                 Console.CancelKeyPress += (_, e) =>
