@@ -1,5 +1,6 @@
 ﻿using JsonImporter.Database;
 using JsonImporter.Models;
+using JsonImporter.Tools;
 using Npgsql;
 using NpgsqlTypes;
 using System;
@@ -47,7 +48,7 @@ namespace JsonImporter.Repositories
         {
             try
             {
-                BulkInsertMessageBinary(messages);
+                BulkInsert(messages);
             }
             catch (Exception ex)
             {
@@ -56,7 +57,7 @@ namespace JsonImporter.Repositories
             }
         }
 
-        public static void BulkInsertMessageBinary(List<Message> messages)
+        public static void BulkInsert(List<Message> messages)
         {
             var clock = new Stopwatch();
 
@@ -92,7 +93,7 @@ namespace JsonImporter.Repositories
             //Details import
             using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Details\" ({detailsColumns}) FROM STDIN (FORMAT BINARY)"))
             {
-                foreach (var detail in FilterDetails(messages))
+                foreach (var detail in ListFilter.FilterDetails(messages))
                 {
                     importer.StartRow();
                     importer.Write(detail.TeamName, NpgsqlDbType.Text);
@@ -118,7 +119,7 @@ namespace JsonImporter.Repositories
             //Coaches import
             using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Coaches\" ({coachesColumns}) FROM STDIN (FORMAT BINARY)"))
             {
-                foreach (var coach in FilterCoach(messages))
+                foreach (var coach in ListFilter.FilterCoach(messages))
                 {
                     importer.StartRow();
                     importer.Write(coach.FamilyName, NpgsqlDbType.Text);
@@ -152,7 +153,7 @@ namespace JsonImporter.Repositories
             //Teams import
             using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Teams\" ({teamsColumns}) FROM STDIN (FORMAT BINARY)"))
             {
-                foreach (var team in FilterTeams(messages))
+                foreach (var team in ListFilter.FilterTeams(messages))
                 {
                     importer.StartRow();
                     importer.Write(team.TeamNumber, NpgsqlDbType.Integer);
@@ -169,7 +170,7 @@ namespace JsonImporter.Repositories
             //Players import
             using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Players\" ({playersColumns}) FROM STDIN (FORMAT BINARY)"))
             {
-                foreach (var player in FilterPlayers(messages))
+                foreach (var player in ListFilter.FilterPlayers(messages))
                 {
                     importer.StartRow();
                     importer.Write(player.Pno, NpgsqlDbType.Integer);
@@ -203,62 +204,6 @@ namespace JsonImporter.Repositories
 
             Console.WriteLine($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
             logger.Info($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
-        }
-
-        public static List<Coach> FilterCoach(List<Message> messages)
-        {
-            List<Coach> coaches = new List<Coach>();
-
-            foreach (Message message in messages)
-            {
-                coaches.Add(message.Teams[0].Coach);
-                coaches.Add(message.Teams[0].AssistCoach1);
-                coaches.Add(message.Teams[0].AssistCoach2);
-
-                coaches.Add(message.Teams[1].Coach);
-                coaches.Add(message.Teams[1].AssistCoach1);
-                coaches.Add(message.Teams[1].AssistCoach2);
-            }
-
-            return coaches;
-        }
-
-        public static List<Team> FilterTeams(List<Message> messages)
-        {
-            List<Team> teams = new List<Team>();
-
-            foreach (Message message in messages)
-            {
-                teams.AddRange(message.Teams);
-            }
-
-            return teams;
-        }
-
-        public static List<Player> FilterPlayers(List<Message> messages)
-        {
-            List<Player> players = new List<Player>();
-
-            foreach (Message message in messages)
-            {
-                players.AddRange(message.Teams[0].Players);
-                players.AddRange(message.Teams[1].Players);
-            }
-
-            return players;
-        }
-
-        public static List<Detail> FilterDetails(List<Message> messages)
-        {
-            List<Detail> details = new List<Detail>();
-
-            foreach (Message message in messages)
-            {
-                details.Add(message.Teams[0].Detail);
-                details.Add(message.Teams[1].Detail);
-            }
-
-            return details;
         }
     }
 }
