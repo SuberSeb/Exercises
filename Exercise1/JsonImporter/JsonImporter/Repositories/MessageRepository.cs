@@ -59,12 +59,21 @@ namespace JsonImporter.Repositories
         public static void BulkInsertMessageBinary(List<Message> messages)
         {
             var clock = new Stopwatch();
-            var messageColumns = "\"Type\"";
-            string detailColumns =
+
+            var messagesColumns = "\"Type\"";
+
+            string detailsColumns =
                 "\"TeamName\", \"TeamNameInternational\", \"ExternalId\", \"InternationalReference\", " +
                 "\"TeamNickname\", \"TeamCode\", \"TeamCodeLong\", \"TeamCodeInternational\", " +
                 "\"TeamCodeLongInternational\", \"TeamNicknameInternational\", \"CountryCode\", \"CountryCodeIOC\", " +
-                "\"Country\", \"Website\", \"IsHomeCompetitor\""; 
+                "\"Country\", \"Website\", \"IsHomeCompetitor\"";
+            
+            string coachesColumns = "\"FamilyName\", \"FirstName\", \"InternationalFamilyName\", " +
+                "\"InternationalFirstName\", \"ScoreboardName\", \"TVName\", \"NickName\", " +
+                "\"ExternalId\", \"NationalityCode\", \"NationalityCodeIOC\", \"Nationality\"";
+            
+            string teamsColumns = "\"TeamNumber\", \"DetailId\", \"CoachId\", \"AssistCoachId1\", " +
+                "\"AssistCoachId2\", \"MessageId\"";
 
             using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
@@ -75,7 +84,7 @@ namespace JsonImporter.Repositories
             clock.Start();
 
             //Details import
-            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Details\" ({detailColumns}) FROM STDIN (FORMAT BINARY)"))
+            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Details\" ({detailsColumns}) FROM STDIN (FORMAT BINARY)"))
             {
                 foreach (var detail in FilterDetails(messages))
                 {
@@ -100,8 +109,30 @@ namespace JsonImporter.Repositories
                 importer.Complete();
             }
 
+            //Coaches import
+            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Coaches\" ({coachesColumns}) FROM STDIN (FORMAT BINARY)"))
+            {
+                foreach (var coach in FilterCoach(messages))
+                {
+                    importer.StartRow();
+                    importer.Write(coach.FamilyName, NpgsqlDbType.Text);
+                    importer.Write(coach.FirstName, NpgsqlDbType.Text);
+                    importer.Write(coach.InternationalFamilyName, NpgsqlDbType.Text);
+                    importer.Write(coach.InternationalFirstName, NpgsqlDbType.Text);
+                    importer.Write(coach.ScoreboardName, NpgsqlDbType.Text);
+                    importer.Write(coach.TVName, NpgsqlDbType.Text);
+                    importer.Write(coach.NickName, NpgsqlDbType.Text);
+                    importer.Write(coach.ExternalId, NpgsqlDbType.Text);
+                    importer.Write(coach.NationalityCode, NpgsqlDbType.Text);
+                    importer.Write(coach.NationalityCodeIOC, NpgsqlDbType.Text);
+                    importer.Write(coach.Nationality, NpgsqlDbType.Text);                    
+                }
+
+                importer.Complete();
+            }
+
             //Messages import
-            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Messages\" ({messageColumns}) FROM STDIN (FORMAT BINARY)"))
+            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Messages\" ({messagesColumns}) FROM STDIN (FORMAT BINARY)"))
             {
                 foreach (var message in messages)
                 {
@@ -110,7 +141,24 @@ namespace JsonImporter.Repositories
                 }
 
                 importer.Complete();
-            }          
+            }
+
+            //Teams import
+            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Messages\" ({teamsColumns}) FROM STDIN (FORMAT BINARY)"))
+            {
+                foreach (var team in FilterTeams(messages))
+                {
+                    importer.StartRow();
+                    importer.Write(team.TeamNumber, NpgsqlDbType.Integer);
+                    importer.Write(team.Detail.DetailId, NpgsqlDbType.Integer);
+                    importer.Write(team.Coach.PersonId, NpgsqlDbType.Integer);
+                    importer.Write(team.AssistCoach1.PersonId, NpgsqlDbType.Integer);
+                    importer.Write(team.AssistCoach2.PersonId, NpgsqlDbType.Integer);
+                    importer.Write(team.MessageId, NpgsqlDbType.Integer);
+                }
+
+                importer.Complete();
+            }
 
             clock.Stop();
 
