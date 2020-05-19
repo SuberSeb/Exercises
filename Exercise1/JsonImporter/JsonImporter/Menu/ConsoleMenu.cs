@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Running;
 using JsonImporter.Json;
 using JsonImporter.Models;
+using JsonImporter.Queue;
 using JsonImporter.Repositories;
 using JsonImporter.Tools;
 using System;
@@ -83,7 +84,7 @@ namespace JsonImporter.Menu
             foreach (var chunk in chunks)
             {
                 MessageRepository.SaveMessagesBulk(chunk.ToList());
-                Kafka.SendMessages(chunk.ToList());
+                //Kafka.SendMessages(chunk.ToList());
             }
         }
 

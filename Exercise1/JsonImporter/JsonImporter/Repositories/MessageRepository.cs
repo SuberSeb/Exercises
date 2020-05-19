@@ -59,7 +59,12 @@ namespace JsonImporter.Repositories
         public static void BulkInsertMessageBinary(List<Message> messages)
         {
             var clock = new Stopwatch();
-            var dataColumns = "Type";
+            var messageColumns = "\"Type\"";
+            string detailColumns =
+                "\"TeamName\", \"TeamNameInternational\", \"ExternalId\", \"InternationalReference\", " +
+                "\"TeamNickname\", \"TeamCode\", \"TeamCodeLong\", \"TeamCodeInternational\", " +
+                "\"TeamCodeLongInternational\", \"TeamNicknameInternational\", \"CountryCode\", \"CountryCodeIOC\", " +
+                "\"Country\", \"Website\", \"IsHomeCompetitor\""; 
 
             using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
@@ -68,7 +73,35 @@ namespace JsonImporter.Repositories
                 cmd.ExecuteNonQuery();
 
             clock.Start();
-            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Messages\" (\"{dataColumns}\") FROM STDIN (FORMAT BINARY)"))
+
+            //Details import
+            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Details\" ({detailColumns}) FROM STDIN (FORMAT BINARY)"))
+            {
+                foreach (var detail in FilterDetails(messages))
+                {
+                    importer.StartRow();
+                    importer.Write(detail.TeamName, NpgsqlDbType.Text);
+                    importer.Write(detail.TeamCodeInternational, NpgsqlDbType.Text);
+                    importer.Write(detail.ExternalId, NpgsqlDbType.Text);
+                    importer.Write(detail.InternationalReference, NpgsqlDbType.Text);
+                    importer.Write(detail.TeamNickname, NpgsqlDbType.Text);
+                    importer.Write(detail.TeamCode, NpgsqlDbType.Text);
+                    importer.Write(detail.TeamCodeLong, NpgsqlDbType.Text);
+                    importer.Write(detail.TeamCodeInternational, NpgsqlDbType.Text);
+                    importer.Write(detail.TeamCodeLongInternational, NpgsqlDbType.Text);
+                    importer.Write(detail.TeamNicknameInternational, NpgsqlDbType.Text);
+                    importer.Write(detail.CountryCode, NpgsqlDbType.Text);
+                    importer.Write(detail.CountryCodeIOC, NpgsqlDbType.Text);
+                    importer.Write(detail.Country, NpgsqlDbType.Text);
+                    importer.Write(detail.Website, NpgsqlDbType.Text);
+                    importer.Write((int)detail.IsHomeCompetitor, NpgsqlDbType.Smallint);
+                }
+
+                importer.Complete();
+            }
+
+            //Messages import
+            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Messages\" ({messageColumns}) FROM STDIN (FORMAT BINARY)"))
             {
                 foreach (var message in messages)
                 {
@@ -77,7 +110,8 @@ namespace JsonImporter.Repositories
                 }
 
                 importer.Complete();
-            }
+            }          
+
             clock.Stop();
 
             Console.WriteLine($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
