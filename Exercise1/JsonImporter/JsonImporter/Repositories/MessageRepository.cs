@@ -75,6 +75,12 @@ namespace JsonImporter.Repositories
             string teamsColumns = "\"TeamNumber\", \"DetailId\", \"CoachId\", \"AssistCoachId1\", " +
                 "\"AssistCoachId2\", \"MessageId\"";
 
+            string playersColumns = "\"Pno\", \"FamilyName\", \"FirstName\", \"InternationalFamilyName\", " +
+                "\"InternationalFirstName\", \"ScoreboardName\", \"TVName\", \"NickName\", " +
+                "\"Website\", \"DateOfBirth\", \"Height\", \"ExternalId\"," +
+                "\"InternationalReference\", \"ShirtNumber\", \"PlayingPosition\", \"Starter\"," +
+                "\"Captain\", \"Active\", \"NationalityCode\", \"NationalityCodeIOC\", \"Nationality\", \"TeamId\"";
+
             using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
 
@@ -144,7 +150,7 @@ namespace JsonImporter.Repositories
             }
 
             //Teams import
-            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Messages\" ({teamsColumns}) FROM STDIN (FORMAT BINARY)"))
+            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Teams\" ({teamsColumns}) FROM STDIN (FORMAT BINARY)"))
             {
                 foreach (var team in FilterTeams(messages))
                 {
@@ -155,6 +161,39 @@ namespace JsonImporter.Repositories
                     importer.Write(team.AssistCoach1.PersonId, NpgsqlDbType.Integer);
                     importer.Write(team.AssistCoach2.PersonId, NpgsqlDbType.Integer);
                     importer.Write(team.MessageId, NpgsqlDbType.Integer);
+                }
+
+                importer.Complete();
+            }
+
+            //Players import
+            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Players\" ({playersColumns}) FROM STDIN (FORMAT BINARY)"))
+            {
+                foreach (var player in FilterPlayers(messages))
+                {
+                    importer.StartRow();
+                    importer.Write(player.Pno, NpgsqlDbType.Integer);
+                    importer.Write(player.FamilyName, NpgsqlDbType.Text);
+                    importer.Write(player.FirstName, NpgsqlDbType.Text);
+                    importer.Write(player.InternationalFamilyName, NpgsqlDbType.Text);
+                    importer.Write(player.InternationalFirstName, NpgsqlDbType.Text);
+                    importer.Write(player.ScoreboardName, NpgsqlDbType.Text);
+                    importer.Write(player.TVName, NpgsqlDbType.Text);
+                    importer.Write(player.NickName, NpgsqlDbType.Text);
+                    importer.Write(player.Website, NpgsqlDbType.Text);
+                    importer.Write(player.DateOfBirth, NpgsqlDbType.Timestamp);
+                    importer.Write(player.Height, NpgsqlDbType.Double);
+                    importer.Write(player.ExternalId, NpgsqlDbType.Text);
+                    importer.Write(player.InternationalReference, NpgsqlDbType.Text);
+                    importer.Write(player.ShirtNumber, NpgsqlDbType.Text);
+                    importer.Write(player.PlayingPosition, NpgsqlDbType.Text);
+                    importer.Write((int)player.Starter, NpgsqlDbType.Smallint);
+                    importer.Write((int)player.Captain, NpgsqlDbType.Smallint);
+                    importer.Write((int)player.Active, NpgsqlDbType.Smallint);
+                    importer.Write(player.NationalityCode, NpgsqlDbType.Text);
+                    importer.Write(player.NationalityCodeIOC, NpgsqlDbType.Text);
+                    importer.Write(player.Nationality, NpgsqlDbType.Text);
+                    importer.Write(player.TeamId, NpgsqlDbType.Integer);
                 }
 
                 importer.Complete();
