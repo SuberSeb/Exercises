@@ -67,11 +67,11 @@ namespace JsonImporter.Repositories
                 "\"TeamNickname\", \"TeamCode\", \"TeamCodeLong\", \"TeamCodeInternational\", " +
                 "\"TeamCodeLongInternational\", \"TeamNicknameInternational\", \"CountryCode\", \"CountryCodeIOC\", " +
                 "\"Country\", \"Website\", \"IsHomeCompetitor\"";
-            
+
             string coachesColumns = "\"FamilyName\", \"FirstName\", \"InternationalFamilyName\", " +
                 "\"InternationalFirstName\", \"ScoreboardName\", \"TVName\", \"NickName\", " +
                 "\"ExternalId\", \"NationalityCode\", \"NationalityCodeIOC\", \"Nationality\"";
-            
+
             string teamsColumns = "\"TeamNumber\", \"DetailId\", \"CoachId\", \"AssistCoachId1\", " +
                 "\"AssistCoachId2\", \"MessageId\"";
 
@@ -131,7 +131,7 @@ namespace JsonImporter.Repositories
                     importer.Write(coach.ExternalId, NpgsqlDbType.Text);
                     importer.Write(coach.NationalityCode, NpgsqlDbType.Text);
                     importer.Write(coach.NationalityCodeIOC, NpgsqlDbType.Text);
-                    importer.Write(coach.Nationality, NpgsqlDbType.Text);                    
+                    importer.Write(coach.Nationality, NpgsqlDbType.Text);
                 }
 
                 importer.Complete();
