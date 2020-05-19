@@ -1,5 +1,7 @@
 ﻿using JsonImporter.Database;
 using JsonImporter.Models;
+using Npgsql;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +12,10 @@ namespace JsonImporter.Repositories
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public static int SaveMessages(List<Message> messages)
+        private static readonly string connectionString =
+            "Host=localhost;Port=5432;Database=JsonImporter;Username=postgres;Password=06090609";
+
+        public static int SaveMessagesEF(List<Message> messages)
         {
             var timer = new Stopwatch();
 
@@ -40,25 +45,99 @@ namespace JsonImporter.Repositories
 
         public static void SaveMessagesBulk(List<Message> messages)
         {
-            var clock = new Stopwatch();
-
             try
             {
-                using (var db = new ApplicationDbContext())
-                {
-                    clock.Start();
-                    db.BulkInsert(messages, options => options.IncludeGraph = true);
-                    clock.Stop();
-
-                    Console.WriteLine($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
-                    logger.Info($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
-                }
+                BulkInsertMessageBinary(messages);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error while adding messages to database: " + ex);
                 logger.Error("Error while adding messages to database: " + ex);
             }
+        }
+
+        public static void BulkInsertMessageBinary(List<Message> messages)
+        {
+            var clock = new Stopwatch();
+            var dataColumns = "Type";
+
+            using var connection = new NpgsqlConnection(connectionString);
+            connection.Open();
+
+            using (var cmd = new NpgsqlCommand($"SET search_path TO public", connection))
+                cmd.ExecuteNonQuery();
+
+            clock.Start();
+            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Messages\" (\"{dataColumns}\") FROM STDIN (FORMAT BINARY)"))
+            {
+                foreach (var message in messages)
+                {
+                    importer.StartRow();
+                    importer.Write(message.Type, NpgsqlDbType.Text);
+                }
+
+                importer.Complete();
+            }
+            clock.Stop();
+
+            Console.WriteLine($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
+            logger.Info($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
+        }
+
+        public static List<Coach> FilterCoach(List<Message> messages)
+        {
+            List<Coach> coaches = new List<Coach>();
+
+            foreach (Message message in messages)
+            {
+                coaches.Add(message.Teams[0].Coach);
+                coaches.Add(message.Teams[0].AssistCoach1);
+                coaches.Add(message.Teams[0].AssistCoach2);
+
+                coaches.Add(message.Teams[1].Coach);
+                coaches.Add(message.Teams[1].AssistCoach1);
+                coaches.Add(message.Teams[1].AssistCoach2);
+            }
+
+            return coaches;
+        }
+
+        public static List<Team> FilterTeams(List<Message> messages)
+        {
+            List<Team> teams = new List<Team>();
+
+            foreach (Message message in messages)
+            {
+                teams.AddRange(message.Teams);
+            }
+
+            return teams;
+        }
+
+        public static List<Player> FilterPlayers(List<Message> messages)
+        {
+            List<Player> players = new List<Player>();
+
+            foreach (Message message in messages)
+            {
+                players.AddRange(message.Teams[0].Players);
+                players.AddRange(message.Teams[1].Players);
+            }
+
+            return players;
+        }
+
+        public static List<Detail> FilterDetails(List<Message> messages)
+        {
+            List<Detail> details = new List<Detail>();
+
+            foreach (Message message in messages)
+            {
+                details.Add(message.Teams[0].Detail);
+                details.Add(message.Teams[1].Detail);
+            }
+
+            return details;
         }
     }
 }

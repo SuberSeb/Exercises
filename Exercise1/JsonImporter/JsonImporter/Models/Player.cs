@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace JsonImporter.Models
@@ -31,14 +32,20 @@ namespace JsonImporter.Models
         public string NationalityCodeIOC { get; set; }
         public string Nationality { get; set; }
 
+        [JsonIgnore]
+        public int TeamId { get; set; }
+
+        [JsonIgnore]
+        public Team Team { get; set; }
+
         public override string ToString()
         {
-            return $"[{PersonId},{Pno},{FamilyName},{FirstName}," +
+            return $"{PersonId},{Pno},{FamilyName},{FirstName}," +
                 $"{InternationalFamilyName},{InternationalFirstName},{ScoreboardName},{TVName}," +
                 $"{NickName},{Website},{DateOfBirth},{Height}," +
                 $"{ExternalId},{InternationalReference},{ShirtNumber},{PlayingPosition}," +
                 $"{(int)Starter},{(int)Captain},{(int)Active},{NationalityCode}," +
-                $"{NationalityCodeIOC},{Nationality}]";
+                $"{NationalityCodeIOC},{Nationality},{TeamId}";
         }
     }
 }

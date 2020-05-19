@@ -15,7 +15,7 @@ namespace JsonImporter.Models
 
         public override string ToString()
         {
-            return $"{MessageId},{Type},[{string.Join(",", Teams)}]";
+            return $"{MessageId},{Type}";
         }
     }
 }

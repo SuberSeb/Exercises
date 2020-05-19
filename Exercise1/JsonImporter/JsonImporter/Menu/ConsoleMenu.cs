@@ -1,7 +1,6 @@
 ﻿using BenchmarkDotNet.Running;
 using JsonImporter.Json;
 using JsonImporter.Models;
-using JsonImporter.Queue;
 using JsonImporter.Repositories;
 using JsonImporter.Tools;
 using System;
@@ -93,7 +92,7 @@ namespace JsonImporter.Menu
             Console.WriteLine("Would you like to run benchmark?");
             Console.Write("Choose and type Parser/Database/Kafka: ");
             var selection = Console.ReadLine();
-            switch(selection)
+            switch (selection)
             {
                 case "Parser":
                     BenchmarkRunner.Run<ParserBenchmark>();

@@ -13,6 +13,7 @@ namespace JsonImporter.Database
 
         public ApplicationDbContext()
         {
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 

@@ -22,6 +22,7 @@ namespace JsonImporter.Json
                     timer.Start();
                     messages = JsonConvert.DeserializeObject<List<Message>>(fileContent);
                     timer.Stop();
+
                     Console.WriteLine($"JSON deserialization successful. Elapsed time: {timer.ElapsedMilliseconds} ms");
                     logger.Info($"JSON deserialization successful. Elapsed time: {timer.ElapsedMilliseconds} ms");
                 }

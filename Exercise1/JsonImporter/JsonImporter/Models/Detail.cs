@@ -27,10 +27,10 @@ namespace JsonImporter.Models
 
         public override string ToString()
         {
-            return $"[{DetailId},{TeamName},{TeamNameInternational},{ExternalId}," +
+            return $"{DetailId},{TeamName},{TeamNameInternational},{ExternalId}," +
                 $"{InternationalReference},{TeamNickname},{TeamCode},{TeamCodeLong}," +
                 $"{TeamCodeInternational},{TeamCodeLongInternational},{TeamNameInternational},{CountryCode}," +
-                $"{CountryCodeIOC},{Country},{Website},{(int)IsHomeCompetitor}]";
+                $"{CountryCodeIOC},{Country},{Website},{(int)IsHomeCompetitor}";
         }
     }
 }

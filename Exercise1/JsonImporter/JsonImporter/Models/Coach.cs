@@ -23,9 +23,9 @@ namespace JsonImporter.Models
 
         public override string ToString()
         {
-            return $"[{PersonId},{FamilyName},{FirstName},{InternationalFamilyName}," +
+            return $"{PersonId},{FamilyName},{FirstName},{InternationalFamilyName}," +
                 $"{InternationalFirstName},{ScoreboardName},{TVName},{NickName}," +
-                $"{ExternalId},{NationalityCode},{NationalityCodeIOC},{Nationality}]";
+                $"{ExternalId},{NationalityCode},{NationalityCodeIOC},{Nationality}";
         }
     }
 }
