@@ -1,8 +1,10 @@
-﻿using JsonImporter.Models;
+﻿using JsonImporter.Database;
+using JsonImporter.Models;
 using JsonImporter.Tools;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace JsonImporter.Json
 {
@@ -14,11 +16,22 @@ namespace JsonImporter.Json
         private List<Player> CreatePlayersList(int numberOfPlayers)
         {
             List<Player> players = new List<Player>();
+            int lastInsertedId = 0;
 
-            for (int i = 1; i < numberOfPlayers + 1; i++)
+            using var db = new ApplicationDbContext();
+            if (db.Players.OrderByDescending(player => player.PersonId).FirstOrDefault() == null)
+                lastInsertedId = 1;
+            else
+                lastInsertedId = db.Players
+                    .OrderByDescending(player => player.PersonId)
+                    .FirstOrDefault().PersonId;
+
+
+            for (int i = lastInsertedId; i < numberOfPlayers + 1; i++)
             {
                 Player player = new Player
                 {
+                    PersonId = i,
                     Pno = generator.RandomNumber(1, 100),
                     FamilyName = generator.RandomString(10, false),
                     FirstName = generator.RandomString(15, false),
@@ -50,8 +63,19 @@ namespace JsonImporter.Json
 
         private Coach CreateCoach()
         {
+            int lastInsertedId = 0;
+
+            using var db = new ApplicationDbContext();
+            if (db.Coaches.OrderByDescending(coach => coach.PersonId).FirstOrDefault() == null)
+                lastInsertedId = 1;
+            else
+                lastInsertedId = db.Coaches
+                    .OrderByDescending(coach => coach.PersonId)
+                    .FirstOrDefault().PersonId;
+
             Coach coach = new Coach
             {
+                PersonId = lastInsertedId,
                 FamilyName = generator.RandomString(10, false),
                 FirstName = generator.RandomString(15, false),
                 InternationalFamilyName = generator.RandomString(15, false),
@@ -70,8 +94,19 @@ namespace JsonImporter.Json
 
         private Detail CreateDetail()
         {
+            int lastInsertedId = 0;
+
+            using var db = new ApplicationDbContext();
+            if (db.Details.OrderByDescending(detail => detail.DetailId).FirstOrDefault() == null)
+                lastInsertedId = 1;
+            else
+                lastInsertedId = db.Details
+                    .OrderByDescending(detail => detail.DetailId)
+                    .FirstOrDefault().DetailId;
+
             Detail detail = new Detail
             {
+                DetailId = lastInsertedId,
                 TeamName = generator.RandomString(10, false),
                 TeamNameInternational = generator.RandomString(10, false),
                 ExternalId = generator.RandomString(10, false),
@@ -94,10 +129,21 @@ namespace JsonImporter.Json
 
         private List<Team> CreateTeams()
         {
+            int lastInsertedId = 0;
+
+            using var db = new ApplicationDbContext();
+            if (db.Teams.OrderByDescending(team => team.TeamId).FirstOrDefault() == null)
+                lastInsertedId = 1;
+            else
+                lastInsertedId = db.Teams
+                    .OrderByDescending(team => team.TeamId)
+                    .FirstOrDefault().TeamId;
+
             List<Team> teams = new List<Team>()
             {
                 new Team
                 {
+                    TeamId = lastInsertedId,
                     TeamNumber = 1,
                     Detail = CreateDetail(),
                     Players = CreatePlayersList(10),
@@ -107,6 +153,7 @@ namespace JsonImporter.Json
                 },
                 new Team
                 {
+                    TeamId = lastInsertedId + 1,
                     TeamNumber = 2,
                     Detail = CreateDetail(),
                     Players = CreatePlayersList(10),
@@ -121,10 +168,25 @@ namespace JsonImporter.Json
         private List<Message> CreateMessages(int numberOfMessages)
         {
             List<Message> messages = new List<Message>();
+            int lastInsertedId = 0;
 
-            for (int i = 0; i < numberOfMessages; i++)
+            using var db = new ApplicationDbContext();
+            if (db.Messages.OrderByDescending(message => message.MessageId).FirstOrDefault() == null)
+                lastInsertedId = 1;
+            else
+                lastInsertedId = db.Messages
+                    .OrderByDescending(message => message.MessageId)
+                    .FirstOrDefault().MessageId;
+
+            for (int i = lastInsertedId; i < numberOfMessages + 1; i++)
             {
-                messages.Add(new Message { Type = $"teams", Teams = CreateTeams() });
+                messages.Add(
+                    new Message 
+                    { 
+                        MessageId = i,
+                        Type = $"teams", 
+                        Teams = CreateTeams() 
+                    });
             }
 
             return messages;

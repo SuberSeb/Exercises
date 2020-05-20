@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace JsonImporter.Tools
 {
-    class ListFilter
+    internal class ListFilter
     {
         public static List<Coach> FilterCoach(List<Message> messages)
         {

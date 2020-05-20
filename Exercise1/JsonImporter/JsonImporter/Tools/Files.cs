@@ -5,7 +5,7 @@ namespace JsonImporter.Tools
 {
     public class Files
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         public static string Read(string path)
         {

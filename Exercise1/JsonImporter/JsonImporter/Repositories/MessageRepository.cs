@@ -22,18 +22,16 @@ namespace JsonImporter.Repositories
 
             try
             {
-                using (var db = new ApplicationDbContext())
-                {
-                    timer.Start();
-                    db.Messages.AddRange(messages);
-                    int messagesAdded = db.SaveChanges();
-                    timer.Stop();
+                using var db = new ApplicationDbContext();
+                timer.Start();
+                db.Messages.AddRange(messages);
+                int messagesAdded = db.SaveChanges();
+                timer.Stop();
 
-                    Console.WriteLine($"{messagesAdded} rows was successfully added to database. Elapsed time: {timer.ElapsedMilliseconds} ms.");
-                    logger.Info($"{messagesAdded} rows was successfully added to database. Elapsed time: {timer.ElapsedMilliseconds} ms.");
+                Console.WriteLine($"{messagesAdded} rows was successfully added to database. Elapsed time: {timer.ElapsedMilliseconds} ms.");
+                logger.Info($"{messagesAdded} rows was successfully added to database. Elapsed time: {timer.ElapsedMilliseconds} ms.");
 
-                    return messagesAdded;
-                }
+                return messagesAdded;
             }
             catch (Exception ex)
             {
@@ -201,6 +199,7 @@ namespace JsonImporter.Repositories
             }
 
             clock.Stop();
+            connection.Close();
 
             Console.WriteLine($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
             logger.Info($"Messages was successfully added to database. Elapsed time: {clock.ElapsedMilliseconds} ms.");
