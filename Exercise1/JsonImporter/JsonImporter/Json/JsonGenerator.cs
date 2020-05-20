@@ -13,21 +13,17 @@ namespace JsonImporter.Json
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly RandomGenerator generator = new RandomGenerator();
 
+        private static int messageId;
+        private static int teamId;
+        private static int detailId;
+        private static int coachId;
+        private static int playerId;
+
         private List<Player> CreatePlayersList(int numberOfPlayers)
         {
             List<Player> players = new List<Player>();
-            int lastInsertedId = 0;
 
-            using var db = new ApplicationDbContext();
-            if (db.Players.OrderByDescending(player => player.PersonId).FirstOrDefault() == null)
-                lastInsertedId = 1;
-            else
-                lastInsertedId = db.Players
-                    .OrderByDescending(player => player.PersonId)
-                    .FirstOrDefault().PersonId;
-
-
-            for (int i = lastInsertedId; i < numberOfPlayers + 1; i++)
+            for (int i = playerId; i < playerId + numberOfPlayers; i++)
             {
                 Player player = new Player
                 {
@@ -58,24 +54,16 @@ namespace JsonImporter.Json
                 players.Add(player);
             }
 
+            playerId += numberOfPlayers;
+
             return players;
         }
 
         private Coach CreateCoach()
         {
-            int lastInsertedId = 0;
-
-            using var db = new ApplicationDbContext();
-            if (db.Coaches.OrderByDescending(coach => coach.PersonId).FirstOrDefault() == null)
-                lastInsertedId = 1;
-            else
-                lastInsertedId = db.Coaches
-                    .OrderByDescending(coach => coach.PersonId)
-                    .FirstOrDefault().PersonId;
-
             Coach coach = new Coach
             {
-                PersonId = lastInsertedId,
+                PersonId = coachId,
                 FamilyName = generator.RandomString(10, false),
                 FirstName = generator.RandomString(15, false),
                 InternationalFamilyName = generator.RandomString(15, false),
@@ -89,24 +77,16 @@ namespace JsonImporter.Json
                 Nationality = generator.RandomString(15, false)
             };
 
+            coachId++;
+
             return coach;
         }
 
         private Detail CreateDetail()
         {
-            int lastInsertedId = 0;
-
-            using var db = new ApplicationDbContext();
-            if (db.Details.OrderByDescending(detail => detail.DetailId).FirstOrDefault() == null)
-                lastInsertedId = 1;
-            else
-                lastInsertedId = db.Details
-                    .OrderByDescending(detail => detail.DetailId)
-                    .FirstOrDefault().DetailId;
-
             Detail detail = new Detail
             {
-                DetailId = lastInsertedId,
+                DetailId = detailId,
                 TeamName = generator.RandomString(10, false),
                 TeamNameInternational = generator.RandomString(10, false),
                 ExternalId = generator.RandomString(10, false),
@@ -124,26 +104,18 @@ namespace JsonImporter.Json
                 IsHomeCompetitor = generator.RandomEnum(55)
             };
 
+            detailId++;
+
             return detail;
         }
 
         private List<Team> CreateTeams()
         {
-            int lastInsertedId = 0;
-
-            using var db = new ApplicationDbContext();
-            if (db.Teams.OrderByDescending(team => team.TeamId).FirstOrDefault() == null)
-                lastInsertedId = 1;
-            else
-                lastInsertedId = db.Teams
-                    .OrderByDescending(team => team.TeamId)
-                    .FirstOrDefault().TeamId;
-
             List<Team> teams = new List<Team>()
             {
                 new Team
                 {
-                    TeamId = lastInsertedId,
+                    TeamId = teamId,
                     TeamNumber = 1,
                     Detail = CreateDetail(),
                     Players = CreatePlayersList(10),
@@ -153,7 +125,7 @@ namespace JsonImporter.Json
                 },
                 new Team
                 {
-                    TeamId = lastInsertedId + 1,
+                    TeamId = teamId + 1,
                     TeamNumber = 2,
                     Detail = CreateDetail(),
                     Players = CreatePlayersList(10),
@@ -162,23 +134,16 @@ namespace JsonImporter.Json
                     AssistCoach2 = CreateCoach()
                 }};
 
+            teamId += 2;
+
             return teams;
         }
 
         private List<Message> CreateMessages(int numberOfMessages)
         {
             List<Message> messages = new List<Message>();
-            int lastInsertedId = 0;
 
-            using var db = new ApplicationDbContext();
-            if (db.Messages.OrderByDescending(message => message.MessageId).FirstOrDefault() == null)
-                lastInsertedId = 1;
-            else
-                lastInsertedId = db.Messages
-                    .OrderByDescending(message => message.MessageId)
-                    .FirstOrDefault().MessageId;
-
-            for (int i = lastInsertedId; i < numberOfMessages + 1; i++)
+            for (int i = messageId; i < messageId + numberOfMessages; i++)
             {
                 messages.Add(
                     new Message 
@@ -186,21 +151,67 @@ namespace JsonImporter.Json
                         MessageId = i,
                         Type = $"teams", 
                         Teams = CreateTeams() 
-                    });
+                    });                
             }
 
+            messageId += numberOfMessages;
+
             return messages;
+        }
+
+        public static void CreateIds()
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                if (db.Players.OrderByDescending(player => player.PersonId).FirstOrDefault() == null)
+                    playerId = 1;
+                else
+                    playerId = db.Players
+                        .OrderByDescending(player => player.PersonId)
+                        .FirstOrDefault().PersonId;
+
+                if (db.Coaches.OrderByDescending(coach => coach.PersonId).FirstOrDefault() == null)
+                    coachId = 1;
+                else
+                    coachId = db.Coaches
+                        .OrderByDescending(coach => coach.PersonId)
+                        .FirstOrDefault().PersonId;
+
+                if (db.Details.OrderByDescending(detail => detail.DetailId).FirstOrDefault() == null)
+                    detailId = 1;
+                else
+                    detailId = db.Details
+                        .OrderByDescending(detail => detail.DetailId)
+                        .FirstOrDefault().DetailId;
+
+                if (db.Teams.OrderByDescending(team => team.TeamId).FirstOrDefault() == null)
+                    teamId = 1;
+                else
+                    teamId = db.Teams
+                        .OrderByDescending(team => team.TeamId)
+                        .FirstOrDefault().TeamId;
+
+                if (db.Messages.OrderByDescending(message => message.MessageId).FirstOrDefault() == null)
+                    messageId = 1;
+                else
+                    messageId = db.Messages
+                        .OrderByDescending(message => message.MessageId)
+                        .FirstOrDefault().MessageId;
+            };            
         }
 
         public string Generate(int numberOfMessages)
         {
             string jsonResult = String.Empty;
 
+            CreateIds();
+
             if (numberOfMessages >= 1)
             {
                 try
                 {
-                    jsonResult = JsonConvert.SerializeObject(CreateMessages(numberOfMessages));
+                    var messages = CreateMessages(numberOfMessages);
+                    jsonResult = JsonConvert.SerializeObject(messages);
                     logger.Info("JSON was serialized successfully");
                 }
                 catch (JsonException ex)

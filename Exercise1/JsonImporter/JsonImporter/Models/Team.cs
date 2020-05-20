@@ -9,7 +9,6 @@ namespace JsonImporter.Models
     [Serializable]
     public class Team
     {
-        [JsonIgnore]
         [Key]
         public int TeamId { get; set; }
 
