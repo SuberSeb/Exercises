@@ -48,14 +48,14 @@ namespace JsonImporter.Menu
             else
             {
                 Console.Write("Message.json is already exist. Would you like to create a new one? Y/N: ");
-                var result = Console.ReadLine();
+                var result = Console.ReadLine().ToLower();
                 switch (result)
                 {
-                    case "Y":
+                    case "y":
                         ShowGenerateJsonDialog();
                         break;
 
-                    case "N":
+                    case "n":
                         break;
 
                     default:
@@ -91,20 +91,20 @@ namespace JsonImporter.Menu
         {
             Console.WriteLine("Would you like to run benchmark?");
             Console.Write("Choose and type Parser/Database/Kafka: ");
-            var selection = Console.ReadLine();
+            var selection = Console.ReadLine().ToLower();
             switch (selection)
             {
-                case "Parser":
+                case "parser":
                     BenchmarkRunner.Run<ParserBenchmark>();
                     ShowExitDialog();
                     break;
 
-                case "Database":
+                case "database":
                     BenchmarkRunner.Run<DbImporterBenchmark>();
                     ShowExitDialog();
                     break;
 
-                case "Kafka":
+                case "kafka":
                     BenchmarkRunner.Run<KafkaBenchmark>();
                     ShowExitDialog();
                     break;
@@ -117,14 +117,14 @@ namespace JsonImporter.Menu
         public static void ShowDeleteMessageFileDialog()
         {
             Console.Write("Would you like to delete generated message.json file? Y/N: ");
-            var importerSelection = Console.ReadLine();
+            var importerSelection = Console.ReadLine().ToLower();
             switch (importerSelection)
             {
-                case "Y":
+                case "y":
                     File.Delete(file);
                     break;
 
-                case "N":
+                case "n":
                     break;
 
                 default:

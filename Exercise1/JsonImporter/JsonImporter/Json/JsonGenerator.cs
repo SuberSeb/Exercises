@@ -13,11 +13,11 @@ namespace JsonImporter.Json
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly RandomGenerator generator = new RandomGenerator();
 
-        private static int messageId;
-        private static int teamId;
-        private static int detailId;
-        private static int coachId;
-        private static int playerId;
+        private static int messageId = 1;
+        private static int teamId = 1;
+        private static int detailId = 1;
+        private static int coachId = 1;
+        private static int playerId = 1;
 
         private List<Player> CreatePlayersList(int numberOfPlayers)
         {
@@ -146,12 +146,12 @@ namespace JsonImporter.Json
             for (int i = messageId; i < messageId + numberOfMessages; i++)
             {
                 messages.Add(
-                    new Message 
-                    { 
+                    new Message
+                    {
                         MessageId = i,
-                        Type = $"teams", 
-                        Teams = CreateTeams() 
-                    });                
+                        Type = $"teams",
+                        Teams = CreateTeams()
+                    });
             }
 
             messageId += numberOfMessages;
@@ -163,41 +163,31 @@ namespace JsonImporter.Json
         {
             using (var db = new ApplicationDbContext())
             {
-                if (db.Players.OrderByDescending(player => player.PersonId).FirstOrDefault() == null)
-                    playerId = 1;
-                else
-                    playerId = db.Players
+                if (db.Players.OrderByDescending(player => player.PersonId).FirstOrDefault() != null)
+                    playerId = 1 + db.Players
                         .OrderByDescending(player => player.PersonId)
                         .FirstOrDefault().PersonId;
 
-                if (db.Coaches.OrderByDescending(coach => coach.PersonId).FirstOrDefault() == null)
-                    coachId = 1;
-                else
-                    coachId = db.Coaches
+                if (db.Coaches.OrderByDescending(coach => coach.PersonId).FirstOrDefault() != null)
+                    coachId = 1 + db.Coaches
                         .OrderByDescending(coach => coach.PersonId)
                         .FirstOrDefault().PersonId;
 
-                if (db.Details.OrderByDescending(detail => detail.DetailId).FirstOrDefault() == null)
-                    detailId = 1;
-                else
-                    detailId = db.Details
+                if (db.Details.OrderByDescending(detail => detail.DetailId).FirstOrDefault() != null)
+                    detailId = 1 + db.Details
                         .OrderByDescending(detail => detail.DetailId)
                         .FirstOrDefault().DetailId;
 
-                if (db.Teams.OrderByDescending(team => team.TeamId).FirstOrDefault() == null)
-                    teamId = 1;
-                else
-                    teamId = db.Teams
+                if (db.Teams.OrderByDescending(team => team.TeamId).FirstOrDefault() != null)
+                    teamId = 1 + db.Teams
                         .OrderByDescending(team => team.TeamId)
                         .FirstOrDefault().TeamId;
 
-                if (db.Messages.OrderByDescending(message => message.MessageId).FirstOrDefault() == null)
-                    messageId = 1;
-                else
-                    messageId = db.Messages
+                if (db.Messages.OrderByDescending(message => message.MessageId).FirstOrDefault() != null)
+                    messageId = 1 + db.Messages
                         .OrderByDescending(message => message.MessageId)
                         .FirstOrDefault().MessageId;
-            };            
+            };
         }
 
         public string Generate(int numberOfMessages)

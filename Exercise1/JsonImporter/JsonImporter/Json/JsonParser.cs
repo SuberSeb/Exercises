@@ -21,6 +21,7 @@ namespace JsonImporter.Json
                     var timer = new Stopwatch();
                     timer.Start();
                     messages = JsonConvert.DeserializeObject<List<Message>>(fileContent);
+                    RestoreNavigationProperties(messages);
                     timer.Stop();
 
                     Console.WriteLine($"JSON deserialization successful. Elapsed time: {timer.ElapsedMilliseconds} ms");
@@ -37,6 +38,22 @@ namespace JsonImporter.Json
             }
 
             return messages;
+        }
+
+        private static void RestoreNavigationProperties(List<Message> messages)
+        {
+            foreach (Message message in messages)
+            {
+                foreach (Team team in message.Teams)
+                {
+                    team.MessageId = message.MessageId;
+
+                    foreach (Player player in team.Players)
+                    {
+                        player.TeamId = team.TeamId;
+                    }
+                }
+            }
         }
     }
 }
