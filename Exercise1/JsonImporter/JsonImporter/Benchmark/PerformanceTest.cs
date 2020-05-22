@@ -11,7 +11,7 @@ namespace JsonImporter.Benchmark
 {
     public class PerformanceTest
     {
-        [SimpleJob(launchCount: 5)]
+        [SimpleJob(launchCount: 3)]
         public class ParserBenchmark
         {
             private static readonly string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -29,7 +29,7 @@ namespace JsonImporter.Benchmark
             public List<Message> Parser() => jsonParser.Parse(jsonContent);
         }
 
-        [SimpleJob(launchCount: 1)]
+        [SimpleJob(launchCount: 3)]
         public class DbImporterBenchmark
         {
             private static readonly string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);

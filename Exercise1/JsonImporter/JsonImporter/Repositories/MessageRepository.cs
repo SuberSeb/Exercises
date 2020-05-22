@@ -22,10 +22,10 @@ namespace JsonImporter.Repositories
 
             try
             {
-                using var db = new ApplicationDbContext();
+                using var database = new ApplicationDbContext();
                 timer.Start();
-                db.Messages.AddRange(messages);
-                int messagesAdded = db.SaveChanges();
+                database.Messages.AddRange(messages);
+                int messagesAdded = database.SaveChanges();
                 timer.Stop();
 
                 Console.WriteLine($"{messagesAdded} rows was successfully added to database. Elapsed time: {timer.ElapsedMilliseconds} ms.");
@@ -83,13 +83,14 @@ namespace JsonImporter.Repositories
             using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
 
-            using (var cmd = new NpgsqlCommand($"SET search_path TO public", connection))
-                cmd.ExecuteNonQuery();
+            using (var command = new NpgsqlCommand($"SET search_path TO public", connection))
+                command.ExecuteNonQuery();
 
             clock.Start();
 
             //Details import
-            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Details\" ({detailsColumns}) FROM STDIN (FORMAT BINARY)"))
+            using (var importer = connection
+                .BeginBinaryImport($"COPY \"public\".\"Details\" ({detailsColumns}) FROM STDIN (FORMAT BINARY)"))
             {
                 foreach (var detail in ListFilter.FilterDetails(messages))
                 {
@@ -115,7 +116,8 @@ namespace JsonImporter.Repositories
             }
 
             //Coaches import
-            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Coaches\" ({coachesColumns}) FROM STDIN (FORMAT BINARY)"))
+            using (var importer = connection
+                .BeginBinaryImport($"COPY \"public\".\"Coaches\" ({coachesColumns}) FROM STDIN (FORMAT BINARY)"))
             {
                 foreach (var coach in ListFilter.FilterCoach(messages))
                 {
@@ -137,7 +139,8 @@ namespace JsonImporter.Repositories
             }
 
             //Messages import
-            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Messages\" ({messagesColumns}) FROM STDIN (FORMAT BINARY)"))
+            using (var importer = connection
+                .BeginBinaryImport($"COPY \"public\".\"Messages\" ({messagesColumns}) FROM STDIN (FORMAT BINARY)"))
             {
                 foreach (var message in messages)
                 {
@@ -149,7 +152,8 @@ namespace JsonImporter.Repositories
             }
 
             //Teams import
-            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Teams\" ({teamsColumns}) FROM STDIN (FORMAT BINARY)"))
+            using (var importer = connection
+                .BeginBinaryImport($"COPY \"public\".\"Teams\" ({teamsColumns}) FROM STDIN (FORMAT BINARY)"))
             {
                 foreach (var team in ListFilter.FilterTeams(messages))
                 {
@@ -166,7 +170,8 @@ namespace JsonImporter.Repositories
             }
 
             //Players import
-            using (var importer = connection.BeginBinaryImport($"COPY \"public\".\"Players\" ({playersColumns}) FROM STDIN (FORMAT BINARY)"))
+            using (var importer = connection
+                .BeginBinaryImport($"COPY \"public\".\"Players\" ({playersColumns}) FROM STDIN (FORMAT BINARY)"))
             {
                 foreach (var player in ListFilter.FilterPlayers(messages))
                 {
